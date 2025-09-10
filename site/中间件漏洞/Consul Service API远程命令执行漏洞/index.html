@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <meta name="author" content="内部使用">
+    <link rel="canonical" href="https://secnn.com/%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%BC%8F%E6%B4%9E/Consul%20Service%20API%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/">
+    <link rel="shortcut icon" href="../../favicon.ico">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>Consul Service API远程命令执行漏洞 - SecNN-Wiki漏洞库管理系统&网络安全知识库-本Wiki所有信息来源于公开漏洞数据库</title>
+    <link href="../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/highlight.css">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Consul Service API\u8fdc\u7a0b\u547d\u4ee4\u6267\u884c\u6f0f\u6d1e", url: "#_top", children: [
+              {title: "\u6f0f\u6d1e\u63cf\u8ff0", url: "#_1" },
+              {title: "\u6f0f\u6d1e\u5f71\u54cd", url: "#_2" },
+              {title: "\u73af\u5883\u642d\u5efa", url: "#_3" },
+              {title: "\u6f0f\u6d1e\u590d\u73b0", url: "#_4" },
+              {title: "\u6f0f\u6d1ePOC", url: "#poc" },
+              {title: "\u6f0f\u6d1e\u4fee\u590d", url: "#_5" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../js/base.js"></script>
+      <script src="../../search/main.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../GeoServer%20JAI-EXT%20%E5%AF%BC%E8%87%B4%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E%20CVE-2022-24816%20CVE-2023-35042/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../GeoServer%20JAI-EXT%20%E5%AF%BC%E8%87%B4%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E%20CVE-2022-24816%20CVE-2023-35042/" class="btn btn-xs btn-link">
+        GeoServer JAI-EXT 导致远程代码注入漏洞 CVE-2022-24816/CVE-2023-35042
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Consul%20Docker%20images%20%E7%A9%BA%E5%AF%86%E7%A0%81%E7%99%BB%E5%BD%95%E6%BC%8F%E6%B4%9E%20CVE-2020-29564/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Consul%20Docker%20images%20%E7%A9%BA%E5%AF%86%E7%A0%81%E7%99%BB%E5%BD%95%E6%BC%8F%E6%B4%9E%20CVE-2020-29564/" class="btn btn-xs btn-link">
+        Consul Docker images 空密码登录漏洞 CVE 2020 29564
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="consul-service-api">Consul Service API远程命令执行漏洞<a class="headerlink" href="#consul-service-api" title="Permanent link">&para;</a></h1>
+<h2 id="_1">漏洞描述<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<p>2018年11月27日，Consul在官方博客中发布了关于Consul工具在特定配置下可能导致远程命令执行（RCE）漏洞的公告，并描述了防护该漏洞的配置方案。</p>
+<p>Consul是HashiCorp公司推出的一款开源工具，用于实现分布式系统的服务发现与配置。与其他分布式服务注册与发现的方案相比，Consul提供的方案更为“一站式”。Consul内置了服务注册与发现框架、分布一致性协议实现、健康检查、Key/Value存储、多数据中心方案，不再需要依赖其他工具（例如ZooKeeper等），使用方式也相对简单。</p>
+<p>Consul使用Go语言编写，因此具有天然的可移植性（支持Linux、Windows和Mac OS X系统）；且安装包中仅包含一个可执行文件，便于部署，可与Docker等轻量级容器无缝配合。</p>
+<p>在特定配置下，恶意攻击者可以通过发送精心构造的HTTP请求在未经授权的情况下在Consul服务端远程执行命令。</p>
+<h2 id="_2">漏洞影响<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<p>启用了脚本检查参数（-enable-script-checks）的所有版本</p>
+<h2 id="_3">环境搭建<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<p>以1.2.4为例，下载地址：<a href="https://releases.hashicorp.com/consul/1.2.4/">https://releases.hashicorp.com/consul/1.2.4/</a></p>
+<h2 id="_4">漏洞复现<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<p>Windows在当前目录下执行命令：</p>
+<div class="highlight"><pre><span></span><code>#开启脚本检测功能，该功能开启后漏洞才存在
+consul.exe agent -dev -client &lt;your-target-ip&gt;  -enable-script-checks   
+</code></pre></div>
+<p>访问<code>your-target-ip:8500</code>：</p>
+<p><img alt="image-20230306091757424" src="../images/image-20230306091757424.png" /></p>
+<p>验证是否存在该远程命令执行漏洞，访问以下网址，如果<code>EnableRemoteScriptChecks</code>参数为<code>true</code>，则漏洞存在：</p>
+<div class="highlight"><pre><span></span><code>http://your-target-ip:port/v1/agent/self
+</code></pre></div>
+<p>也可以使用Meterpreter进行利用：</p>
+<div class="highlight"><pre><span></span><code>msf6 &gt; search Hashicorp
+msf6 &gt; use exploit/multi/misc/consul_service_exec
+</code></pre></div>
+<h2 id="poc">漏洞POC<a class="headerlink" href="#poc" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">argparse</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">requests.packages</span><span class="w"> </span><span class="kn">import</span> <span class="n">urllib3</span>
+<span class="n">urllib3</span><span class="o">.</span><span class="n">disable_warnings</span><span class="p">()</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">colorama</span><span class="w"> </span><span class="kn">import</span> <span class="n">init</span>
+<span class="n">init</span><span class="p">(</span><span class="n">autoreset</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="n">headers</span><span class="o">=</span><span class="p">{</span>
+<span class="s1">&#39;User-Agent&#39;</span><span class="p">:</span> <span class="s1">&#39;Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101 Firefox/78.0&#39;</span>
+<span class="p">}</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">url</span><span class="p">():</span>
+    <span class="n">des</span><span class="o">=</span><span class="s2">&quot;Hashicorp Consul Service API远程命令执行漏洞POC&quot;</span>
+    <span class="n">parser</span> <span class="o">=</span> <span class="n">argparse</span><span class="o">.</span><span class="n">ArgumentParser</span><span class="p">(</span><span class="n">description</span><span class="o">=</span><span class="n">des</span><span class="p">)</span>
+    <span class="n">parser</span><span class="o">.</span><span class="n">add_argument</span><span class="p">(</span><span class="s1">&#39;target_url&#39;</span><span class="p">,</span><span class="nb">type</span><span class="o">=</span><span class="nb">str</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s1">&#39;The target address,example: http://192.168.140.153&#39;</span><span class="p">)</span>
+    <span class="n">args</span> <span class="o">=</span> <span class="n">parser</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span> 
+    <span class="n">target_url</span> <span class="o">=</span> <span class="n">args</span><span class="o">.</span><span class="n">target_url</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Hashicorp Consul Service API远程命令执行漏洞POC&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;[-]正在执行检测...&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;[-]目标地址：</span><span class="si">{</span><span class="n">target_url</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">,)</span>
+    <span class="k">return</span> <span class="n">target_url</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">check</span><span class="p">(</span><span class="n">target_url</span><span class="p">):</span>
+    <span class="n">url</span> <span class="o">=</span> <span class="n">target_url</span> <span class="o">+</span> <span class="s1">&#39;/v1/agent/self&#39;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">url</span><span class="p">,</span><span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span><span class="n">verify</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span><span class="n">timeout</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span><span class="o">.</span><span class="n">text</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">response</span><span class="p">)[</span><span class="s1">&#39;DebugConfig&#39;</span><span class="p">][</span><span class="s1">&#39;EnableRemoteScriptChecks&#39;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">str</span><span class="p">(</span><span class="n">value</span><span class="p">)</span> <span class="o">==</span> <span class="s1">&#39;True&#39;</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\033</span><span class="s1">[0;31m[+]漏洞存在</span><span class="se">\033</span><span class="s1">[0m&#39;</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;漏洞不存在&#39;</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">a</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;漏洞不存在&#39;</span><span class="p">)</span>
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">target_url</span> <span class="o">=</span> <span class="n">url</span><span class="p">()</span>
+    <span class="n">check</span><span class="p">(</span><span class="n">target_url</span><span class="p">)</span>
+</code></pre></div>
+<h2 id="_5">漏洞修复<a class="headerlink" href="#_5" title="Permanent link">&para;</a></h2>
+<ul>
+<li>禁用Consul服务器上的脚本检查功能</li>
+<li>确保Consul HTTP API服务无法通过外网访问或调用</li>
+<li>对<code>/v1/agent/service/register</code> 禁止PUT方法</li>
+</ul>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../GeoServer%20JAI-EXT%20%E5%AF%BC%E8%87%B4%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E%20CVE-2022-24816%20CVE-2023-35042/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../GeoServer%20JAI-EXT%20%E5%AF%BC%E8%87%B4%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E%20CVE-2022-24816%20CVE-2023-35042/" class="btn btn-xs btn-link">
+        GeoServer JAI-EXT 导致远程代码注入漏洞 CVE-2022-24816/CVE-2023-35042
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Consul%20Docker%20images%20%E7%A9%BA%E5%AF%86%E7%A0%81%E7%99%BB%E5%BD%95%E6%BC%8F%E6%B4%9E%20CVE-2020-29564/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Consul%20Docker%20images%20%E7%A9%BA%E5%AF%86%E7%A0%81%E7%99%BB%E5%BD%95%E6%BC%8F%E6%B4%9E%20CVE-2020-29564/" class="btn btn-xs btn-link">
+        Consul Docker images 空密码登录漏洞 CVE 2020 29564
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content"><p>Copyright © 2025 SecNN-Wiki</p>
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="None">Windmill Dark</a> theme by 内部使用 (noraj).</p>
+</footer>
+
+</body>
+</html>

