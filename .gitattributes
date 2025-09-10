@@ -1,0 +1,10 @@
+# 统一文本文件为 LF（跨平台友好）
+* text=auto eol=lf
+
+# 按需指定 CRLF（如某些 Windows 专用脚本）
+*.bat text eol=crlf
+
+# 二进制不做转换
+*.png binary
+*.jpg binary
+*.pdf binary
