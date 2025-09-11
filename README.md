@@ -4,7 +4,7 @@
 
 在线阅读：https://www.secnn.com/POC-EXP/index.html
 
-项目地址：https://github.com/SecNN/SecNN-Wiki/
+项目地址：https://github.com/SecNN/SecNN-Wiki
 
 
 #### ⚠️ 安全声明 ⚠️ 
