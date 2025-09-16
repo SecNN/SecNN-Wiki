@@ -1,10 +1,12 @@
 # SecNN-Wiki漏洞库管理系统&网络安全知识库-本Wiki所有信息来源于公开漏洞数据库
 
-常见漏洞知识库文档
+🌈常见漏洞知识库文档🚀
 
-在线阅读：https://www.secnn.com/POC-EXP/index.html
+在线阅读：https://www.secnn.com/POC-EXP
 
 项目地址：https://github.com/SecNN/SecNN-Wiki
+
+![SecNN-Wiki](./docs/images/index/SecNN-Wiki.png)
 
 
 #### ⚠️ 安全声明 ⚠️ 
