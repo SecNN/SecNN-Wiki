@@ -46,15 +46,25 @@
 
 ## 更新日志
 
-* Next.js中间件鉴权绕过漏洞CVE-2025-29927
-* Pichome 任意文件读取漏洞CVE-2025-1743
-* Yeswiki 路径遍历漏洞允许任意读取文件
-* pgAdmin 远程代码执行漏洞 (CVE-2025-2945)
-* Zabbix CVE-2024-42327 API SQL注入漏洞
-* Palo Alto Networks Expedition 未授权SQL注入漏洞CVE-2024-9465
-* Wordpress RCE漏洞 CVE-2024-5932
-* SPIP porte_plume远程代码执行漏洞CVE-2024-7954
-* ......
+```
+Everlab-Catalog_UploadApi存在文件上传漏洞
+Everlab-Catalog_Upload_Upload存在文件上传漏洞
+Everlab-Catalog_Util_Upload存在文件上传漏洞
+学分制系统存在SQL注入漏洞
+中新天达系统ProxyDownload存在任意文件读取漏洞
+京师心智心理健康测评系统-前台信息泄露
+高校人力资源管理系统ReportServer存在敏感信息泄露漏洞
+SuperMap_iServer_login存在远程命令执行漏洞
+奥威亚教育视频云平台download存在任意文件下载漏洞、VideoCover存在任意文件上传漏洞
+Campuswit_uploadFiles存在任意文件上传漏洞
+正方教学管理信息服务平台ReportServer存在任意文件读取漏洞
+正方数字化校园平台jsdx_jwc存在SQL注入漏洞、getrzzxconf存在信息泄漏漏洞、RzptManage存在任意文件写入漏洞
+图书检索平台DownLoadFile存在任意文件读取漏洞、DownLoad存在任意文件读取漏洞、SaveFile存在任意文件上传漏洞、ueditor编辑器存在任意文件上传漏洞
+图书检索平台UploadClientFile存在任意文件上传漏洞
+河南省风速科技统一认证平台存在密码重置漏洞
+瑞格智慧心理服务平台Seach存在SQL注入漏洞、Sel_Admin_Teacher_All存在敏感信息泄露漏洞
+联奕统一身份认证平台getDataSource存在信息泄露漏洞
+```
 
 ## 安装MkDocs
 
